@@ -1,0 +1,5 @@
+Gruppemøte 01.11.2013
+Present: Ole, Jesper, (Lars working night shift)
+-Found a way to build skip-logic
+-Diveded the work for milestone 1, check out wiki.
+-Created git repositiry for the project.
