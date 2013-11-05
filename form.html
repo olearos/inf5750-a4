@@ -44,7 +44,70 @@
 
 		<h1>Skip logic</h1>
 
+		<script>
+		var f = document.createElement("form");
+		f.setAttribute('method',"post");
+		f.setAttribute('action',"submit.php");
 
+		/*
+		* create elements.  
+		*
+		*/
+
+		var fieldset1 = document.createElement("fieldset"); 
+		var legendInformation = document.createElement("legend"); 
+
+		var labelFirstname = document.createElement("label"); 
+		labelFirstname.setAttribiute("for", "firstname");
+
+		var firstName = document.createElement("input");
+		firstName.setAttribute('type',"text");
+		firstName.setAttribute('name',"firstname");
+		firstName.setAttribute('placeholder', 'Firstname'); 
+		firstName.setAttribute("required", "true"); 
+		firstName.setAttribute("autofocus", "true"); 
+		
+		var labelSurname = document.createElement("label"); 
+		labelSurname.setAttribiute("for", "surname");
+
+		var surName = document.createElement("input"); 
+		surName.setAttribute('type',"text");
+		surName.setAttribute('name',"username");
+		surName.setAttribute('placeholder', 'Surname'); 
+		surName.setAttribute("required", "true"); 
+
+		var labelEmail = document.createElement("label"); 
+		labelEmail.setAttribiute("for", "email");
+		
+		var email = document.createElement("input"); 
+		email.setAttribute('type', 'email'); 
+		email.setAttribute('name', 'email'); 
+		email.setAttribute('placeholder', 'email'); 
+		email.setAttribute('required', 'true'); 
+
+		var county = document.createElement("select"); 
+		email.setAttribute('type', 'email'); 
+		email.setAttribute('name', 'email'); 
+		email.setAttribute('placeholder', 'email'); 
+		email.setAttribute('required', 'true'); 
+
+		var s = document.createElement("input");
+		s.setAttribute('type',"submit");
+		s.setAttribute('value',"Submit");
+
+
+		//Appending
+		f.appendChild(i);
+		f.appendChild(s);
+
+		//and some more input elements here
+		//and dont forget to add a submit button
+
+		//Insert form in <body>
+		document.getElementsByTagName('body')[0].appendChild(f);
+
+		</script>
+<!--
 		<form class="form" id="mainform" action="?do=addRegistration" method="POST">
 			<fieldset>
 				<legend>Information</legend>
@@ -81,7 +144,7 @@
 				</ul>
 			</fieldset>
 		</form>
-	
+	-->
 	</body>
 	
 
