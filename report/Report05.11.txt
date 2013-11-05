@@ -1,0 +1,8 @@
+Gruppemøte 05.11.2013
+Present: Ole, Jesper, Lars, Mats
+-What have we done since last group meeting.
+-Discuss how to get the forms from the web api.
+-Discuss how to implement the skip logic part, document the idea behind it.
+   -Use visible/non-visible during registration of scheame, and check the data before sending in.
+   
+-Deliver a significant amount of work before next group meeting on friday, add to git repository.
