@@ -1,0 +1,12 @@
+function skipLogic(){
+    var visible;
+    var requirements;
+    var formelemList;
+}
+/*
+*Funtion to check if the formnode has requirements
+*/
+function checkRequirement(){
+
+}
+
