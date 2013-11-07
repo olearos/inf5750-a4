@@ -1,151 +1,35 @@
 <html>
-	<head>
-		<style>
+  <head>
+    <scipt src="js/skip-logic.js"/>
+  </head>
+  <body>      
+    <h1>Skip logic</h1>
 
-		body {
-			margin: 0; 
-			padding: 0;
-			font-family: Computer Modern Roman, verdana;
-
-		}
-
-		h1 {
-			margin-left: 10px;
-			margin-top: 20px;
-		}
-
-		#mainform {
-			margin-left: 10px;
-			padding: 2px;
-			width: 400px;
-		}
-
-
-		#mainform fieldset {
-			border: 0;
-		}
-
-		fieldset legend {
-			background-color: #FF9640;
-			color: black;
-			font-family: arial; 
-			text-transform: uppercase;
-			width: 100%;
-		}
-
-		</style>
-	
-	
-	</head>
-	
-	
-	<body>
-
-
-		<h1>Skip logic</h1>
-
-		<script>
-		var f = document.createElement("form");
-		f.setAttribute('method',"post");
-		f.setAttribute('action',"submit.php");
-
-		/*
-		* create elements.  
-		*
-		*/
-
-		var fieldset1 = document.createElement("fieldset"); 
-		var legendInformation = document.createElement("legend"); 
-
-		var labelFirstname = document.createElement("label"); 
-		labelFirstname.setAttribiute("for", "firstname");
-
-		var firstName = document.createElement("input");
-		firstName.setAttribute('type',"text");
-		firstName.setAttribute('name',"firstname");
-		firstName.setAttribute('placeholder', 'Firstname'); 
-		firstName.setAttribute("required", "true"); 
-		firstName.setAttribute("autofocus", "true"); 
-		
-		var labelSurname = document.createElement("label"); 
-		labelSurname.setAttribiute("for", "surname");
-
-		var surName = document.createElement("input"); 
-		surName.setAttribute('type',"text");
-		surName.setAttribute('name',"username");
-		surName.setAttribute('placeholder', 'Surname'); 
-		surName.setAttribute("required", "true"); 
-
-		var labelEmail = document.createElement("label"); 
-		labelEmail.setAttribiute("for", "email");
-		
-		var email = document.createElement("input"); 
-		email.setAttribute('type', 'email'); 
-		email.setAttribute('name', 'email'); 
-		email.setAttribute('placeholder', 'email'); 
-		email.setAttribute('required', 'true'); 
-
-		var county = document.createElement("select"); 
-		email.setAttribute('type', 'email'); 
-		email.setAttribute('name', 'email'); 
-		email.setAttribute('placeholder', 'email'); 
-		email.setAttribute('required', 'true'); 
-
-		var s = document.createElement("input");
-		s.setAttribute('type',"submit");
-		s.setAttribute('value',"Submit");
-
-
-		//Appending
-		f.appendChild(i);
-		f.appendChild(s);
-
-		//and some more input elements here
-		//and dont forget to add a submit button
-
-		//Insert form in <body>
-		document.getElementsByTagName('body')[0].appendChild(f);
-
-		</script>
-<!--
-		<form class="form" id="mainform" action="?do=addRegistration" method="POST">
-			<fieldset>
-				<legend>Information</legend>
-				<ol>
-					<li>
-						<label for=name>First name</label>
-						<input id="name" name="first" type="text" placeholder="Firstname" required autofocus>
-					</li>
-					<li>
-						<label for=email>Surname</label>
-						<input id="email" name="surname" type="text" placeholder="Surname" required>
-					</li>
-					<li>
-						<label for=phone>Email</label>
-						<input id="email" name="phone" type="email" placeholder="me@domain.com" required>
-					</li>
-				</ol>
-			</fieldset>
-
-			<fieldset>
-
-				<legend>Yes and no's</legend>
-
-				<ul>
-					<li>
-						<label for="county">County</label>
-						<select id="county" name="county" reqired> 
-							<option name="austagder">Aust-Agder</option>
-							<option name="vestagder">Vest-Agder</option>
-							<option name="telemark">Telemark</option>
-							<option name="oslo"  selected="true">Oslo</option>
-						</select>
-					</li>
-				</ul>
-			</fieldset>
-		</form>
-	-->
-	</body>
-	
-
+    <form class="form" id="form" action="?do=addRegistration" method="POST">
+      <fieldset>
+        <legend>Information</legend>
+        <ol>
+          <li>
+            <label for=name>First name</label>
+            <input id="name" name="first" type="text" placeholder="Firstname" required autofocus>
+          </li>
+          <li>
+            <label for=email>Surname</label>
+            <input id="email" name="surname" type="text" placeholder="Surname" required>
+          </li>
+          <li>
+            <label for=phone>Email</label>
+            <input id="email" name="phone" type="email" placeholder="me@domain.com" required>
+          </li>
+	  <
+        </ol>
+      </fieldset>
+    <script>
+      var question = question();
+      question.question = documents.forms.pop();
+      showQuestion(question);
+    </script>
+  </body>
+    
+    
 </html>
