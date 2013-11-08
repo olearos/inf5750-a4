@@ -1,0 +1,13 @@
+Report 08.11.2013
+Present: Ole, Jesper, Lars(sick daughter)
+-The last meeting before first milestone is on Tuesday, should have something working by then.
+-Status: -Interaction with API is working
+         -Skip-logic ?
+	 -Uses proxy server to run against demo version.
+Next time: 
+          -Ole: Set up proxy, continue with form.
+          -Jesper: Continue with API interaction, use what Lars have done.
+          -Mats: Continue with skip-logic, need to get something working.
+          -Lars: Continue with API interaction.
+
+Next meeting: Tuesday 12.11, 12.00

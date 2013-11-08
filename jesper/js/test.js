@@ -1,71 +1,60 @@
 
 function getData() {
-    //alert("Hva");
-    //window.open("http://apps.dhis2.org/demo/api/attributeTypes.json");
-    document.write("<p>This is a paragraph</p>");
-    
-    authenticate();
-    
-    $.ajax({
-	type: "GET",
-	dataType: "jsonp",
-	url: "http://apps.dhis2.org/demo/api/attributeTypes.jsonp",
-    })
-    
-	.done(function(json) {
-	    printData(json);
+	var username = "admin";
+	var password = "district";
+
+	$.ajax({
+		type : "GET",
+		url : "/api/currentUser", //programStages.json",
+
+		headers : {
+			Authorization: "Basic " + btoa( username + ":" + password ),
+		},
+
+		dataType : "json",
 	})
-    
-	.fail(function() {
-	    alert("Something went wrong!");
-	});
-    document.write("<p>END</p>");
-}
-
-function authenticate() {
-    //var xhRequest = new XMLHttpRequest();
-    //xhRequest.open('POST', 'http://apps.dhis2.org/demo/dhis-web-commons-security/login.action', true, "admin", "district");
-    //xhRequest.setRequestHeader("Content-type", "text/javascript");
-    //xhRequest.withCredentials = "true";
-    //xhRequest.send("j_username=admin&j_password=district");
-    //xhRequest.send();
-    //console.log(xhRequest);
-
-    var username = "admin";
-    var password = "district";
-    var tok = username + ':' + password;
-    var hash = btoa(tok);
-    
-    $.ajax({
-	type: "POST",
-	url:"/api/currentUser",
-	data:"jsonp",	
-
-	headers: {
-	    Authorization: "Basic " + hash,
-	},
-	
-    })
-
-	.done(function(json) {
-	    printData(json);
+	.fail(function (error) {
+		alert("OLEerror");
+		document.write("<ul>");
+		printObject(error);
+		document.write("</ul>");
 	})
-	.fail(function() {
-	    alert("Something went wrong 2!");
+	.done(function (json) {
+		document.write("<ul>");
+		printObject(json);			
+		document.write("</ul>");
 	});
-    
-    //jQuery(document).ready(function() {
-//	$.post("http://apps.dhis2.org/demo/dhis-web-commons-security/login.action",{
-//	    j_username: "admin", j_password: "district"
-//	}
-  //     );
-    //});
 }
 
 
-function printData(json) {
-    //localStorage.setItem('json_test', JSON.stringify(json));
-    console.log(json); 
+function printObject(json) {
+	$.each(json, function(index, value) {
+		if ( typeof value === "object" ) {
+			if ( Object.prototype.toString.call( value ) === "[object Array]" ) {
+				document.write(index + "<ol>");
+				printObject(value);
+				document.write("</ol>");
+			}
+			else if ( value === null ) {
+				document.write("<li>" + index + " : NULL!</li>");
+			}
+			else {
+				document.write(index + "<ul>");
+				printObject(value);
+				document.write("</ul>");
+			}
+		}
+		else {
+			document.write("<li>" + index + " : " + value + "</li>");
+		}
+	});
 }
 
+/**
+ * For encoding utf8 to b64, btoa() cannot be used directly with utf8
+ * (if using input fields and utf8 encoding in browser)
+ */
+function utf8_to_b64( str ) {
+	return btoa(unescape(encodeURIComponent( str )));
+}
 
