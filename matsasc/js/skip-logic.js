@@ -1,9 +1,14 @@
-function question(){
+function question(visible, q, answear){
     var visible;
     var requirements;
-    var formelemList;
-    var question;
+    var formElemList;
+    var q;
     var answear;
+
+    this.visible=visible;
+    requirements = null;
+    this.q = q;
+    this.answear = answear;
 }
 
 function checkRequirements(question){

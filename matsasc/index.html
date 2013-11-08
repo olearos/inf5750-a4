@@ -14,20 +14,22 @@
             <input id="name" name="first" type="text" placeholder="Firstname" required autofocus>
           </li>
           <li>
-            <label for=email>Surname</label>
-            <input id="email" name="surname" type="text" placeholder="Surname" required>
+            <label for=lastname>Surname</label>
+            <input id="lastname" name="surname" type="text" placeholder="Surname" required>
           </li>
           <li>
-            <label for=phone>Email</label>
+            <label for=mail>Email</label>
             <input id="email" name="phone" type="email" placeholder="me@domain.com" required>
           </li>
-	  <
+	  <button type="button" onclick="myFunction()">Click Me!</button>
         </ol>
       </fieldset>
     <script>
-      var question = question();
-      question.question = documents.forms.pop();
-      showQuestion(question);
+      function myFunction(){
+         var question = question();
+         question.question = documents.forms.pop();
+         showQuestion(question);
+      }
     </script>
   </body>
     
