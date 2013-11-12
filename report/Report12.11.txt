@@ -1,0 +1,8 @@
+Gruppemøte 12.11.2013
+Present: Ole, Jesper, Lars
+-Ole and Lars, checks out angularjs and necessary app functionality.
+-Jesper, create a webapp for milestone 1, by thursday 11.00
+-Check the wiki and update if necessary.
+-Mats has withdrawn from the group.
+
+-Next meeting, thursday 14.11.2013, 11.00
