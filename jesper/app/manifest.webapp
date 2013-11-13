@@ -1,0 +1,21 @@
+{
+	"version": "0.1",
+	"name": "Survey Gering",
+	"description": "Test app for gering-ding",
+	"launch_path": "/index.html",
+	"icons": {
+		 "16": "/img/icons/mortar-16.png",
+		 "48": "/img/icons/mortar-48.png",
+		 "128": "/img/icons/mortar-128.png"
+	},
+	"developer": {
+		     "name": "jesperov",
+		     "url": "http://me.com"
+	},
+	"default_locale": "en",
+	"activities": {
+		      "dhis": {
+		      	      "href": "*"
+		}
+	}
+}
