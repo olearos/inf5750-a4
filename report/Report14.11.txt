@@ -1,0 +1,7 @@
+Group meeting 14.11
+Present: Lars, Jesper, Ole(not feeling well)
+-Taken a quick update of progress
+-Milestone 2 is achieved
+-Merge current code into singel application.
+
+Next meeting: Tuesday 19.11, kl.12
