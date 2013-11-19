@@ -1,0 +1,27 @@
+<!doctype html>
+
+<html ng-app>
+
+   <head>
+      <script src="js/angular.min.js"></script>
+      <script src="js/app.js"></script>
+   </head>
+
+   <body>
+      <h1>DHIS2 form entry</h1>
+
+      <div ng-controller="LoginCtrl">
+         <span>Please log in to access the form entry system</span>
+         <span>{{loginError}}</span>
+         <form ng-submit="login()">
+            <ul>
+               <li><input type="text" ng-model="login.username" placeholder="Username" /></li>
+               <li><input type="password" ng-model="login.password" placeholder="Password" /></li>
+               <li><input class="btn-promary" type="submit" value="Log in" /></li>
+            </ul>
+         </form>
+      </div>
+
+   </body>
+
+</html>
