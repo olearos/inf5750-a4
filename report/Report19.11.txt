@@ -1,0 +1,14 @@
+Group meeting 19.11.2013
+Present: Lars, Ole, Jesper
+-File structure updated for development of webapp.
+-What will we need of functionality:
+   -(Choose what scheme.)
+   -Layout for scheme.
+   -Skip-logic for the scheme.
+   -DHIS API I/O.
+   
+-Who will do what:
+   -Lars and Ole: work this week with fetching and set data for further use. 
+   -Jesper: Work next week with GUI or skip-logic, depends on the results from last week.
+
+Next meeting, take it when necessary.
