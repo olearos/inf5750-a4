@@ -1,0 +1,10 @@
+<h3>Please select form to fill in</h3>
+<p>Recieved: 
+{{dhisResult}}
+</p>
+<p>Table:</p>
+<table class="table table-striped">
+   <tr ng-repeat="form in dhisResult"> <!-- | orderBy: name"> -->
+      <td>{{form.name}}</td>
+   </tr>
+</table>

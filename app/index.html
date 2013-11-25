@@ -1,26 +1,21 @@
 <!doctype html>
 
-<html ng-app>
+<html ng-app="skipLogic">
 
    <head>
-      <script src="js/angular.min.js"></script>
+      <meta charset="utf-8"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-resource.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js"></script>
       <script src="js/app.js"></script>
+
+<!--      <link rel="stylesheet " href="css/bootstrap.css" />  -->
    </head>
 
    <body>
       <h1>DHIS2 form entry</h1>
 
-      <div ng-controller="LoginCtrl">
-         <span>Please log in to access the form entry system</span>
-         <span>{{loginError}}</span>
-         <form ng-submit="login()">
-            <ul>
-               <li><input type="text" ng-model="login.username" placeholder="Username" /></li>
-               <li><input type="password" ng-model="login.password" placeholder="Password" /></li>
-               <li><input class="btn-promary" type="submit" value="Log in" /></li>
-            </ul>
-         </form>
-      </div>
+      <div ng-view></div>
 
    </body>
 
