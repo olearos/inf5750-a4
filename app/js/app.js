@@ -1,7 +1,7 @@
 'use strict';
 
 
-// TODO Remove before upload
+// TODO Remove before upload ?
 var username = 'admin';
 var password = 'district';
 var dhisAPI = 'http://apps.dhis2.org/demo';
@@ -14,61 +14,17 @@ var login = 'Basic ' + btoa( username + ":" + password);
 
 var skipLogicServices = angular.module( 'skipLogic.services', ['ngResource'] );
 
-// Does not work
-skipLogicServices.factory( 'dhisResourceApi', function($resource) {
-         var api = $resource(
-            /*dhisAPI +*/ '/x_api/:id.json',
-            {}, // {callback:'JSON_CALLBACK'},
-            // TODO Remove headers before upload
-            {
-               get: {
-                     method:'JSONP',
-                     headers: {
-                        authorization: login
-                     }
-               },
-               save: {
-                  method:'POST',
-                  headers: {
-                     authorization: login
-                  }
-               }
-            }
-            );
-         return api;
-      });
-
-skipLogicServices.factory( 'dhisHttpApi', ['$http', function($http) {
-      var api = {
-         fetch: function(id) {
-            return $http.jsonp({
-//               method: "JSONP",
-               url: dhisAPI + '/api/' + id /*'programStages'*/ + '.json',
-//               dataType: "json",
-               headers: {
-                  "Authorization": login
-               }
-            }).success(function(data, status, headers, config) {
-                  return data;
-            }).failure(function(data, status, headers, config) {
-                  return status; // alert("API failure");
-            });
-         }
-      };
-      return api;
-}]);
-
-
 
 /// Controllers
 
 var skipLogicControls = angular.module('skipLogic.controllers', []);
 
-// This works apart from sending auth header
+// This works, but doesn't use a service which would be preferable
 skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($scope, $http) {
 
       $http({
-         url: dhisAPI + '/api/programStages' + '.json',
+         url: // dhisAPI +
+            '/api/programStages' + '.json',
          method: "GET",
          dataType: "json",
          accept: "text/json",
@@ -82,49 +38,12 @@ skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($sco
       });
 }]);
 
-/*
-// This is a mess, has never worked
-skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', 'dhisHttpApi', function($scope, $http, dhisHttpApi) {
 
-      $http({
-         url: dhisAPI + '/api/programStages' + '.json',
-         method: "JSONP",
-         dataType: "text/json",
-//         headers: {
-//            Authorization: login
-//        }
-      }).success( function(data) {
-         $scope.dhisResult = data;
-      });
-//      response = dhisApi.fetch('programStages')
-//   .then( function(data) { // (function(response) {
-//         $scope.dhisResult = data; // data; //.results;
-//   }, function(data) {
-//      alert("API failure");
-//   });
-   //   }) //, function() {
-//         console.log("Error: Not logged in");
-      }]);
-//   }]);
-
-
-// This has worked (not this particular implementation, but the service is currently broken. Headers are disfunctional.
-skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', 'dhisResourceApi', function($scope, $http, dhisResourceApi) {
-   console.log("Controller");
-   dhisResourceApi({id: 'programStages'}, function(data) {
-      console.log(data);
-      $scope.dhisResult = data.programStages;
-   });
-//   var Api = dhisResourceApi();
-//   Api.action({});
-}]);
-*/
-
-skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhisApi', function($scope) {
+skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', function($scope, $http) {
    // TODO
    }]);
 
-skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhisApi', function($scope) {
+skipLogicControls.controller('editLogicCtrl', ['$scope', '$http', function($scope, $http) {
    // TODO
    }]);
 
@@ -136,7 +55,8 @@ var skipLogic =  angular.module('skipLogic', [
 //      'ngResource',
       'ngRoute',
       'skipLogic.controllers',
-      'skipLogic.services']);
+      'skipLogic.services',
+      ]);
 
 // Configure HTTP headers, this actually works, apart for Authorization :S
 skipLogic.config(function($httpProvider) {
@@ -144,7 +64,6 @@ skipLogic.config(function($httpProvider) {
       'Accept': 'application/json, text/plain, * / *',
       'Data': '',
       'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q="}; // login};
-   console.log($httpProvider.defaults);
 });
 
 skipLogic.config(function($routeProvider) {
@@ -167,8 +86,102 @@ skipLogic.config(function($routeProvider) {
 
 
 
+//// Clutter/tests that does not work
 
-// Everything below here are notes
+// (Services)
+
+/* // Does not work, can't get ngResource to use headers at all
+skipLogicServices.factory( 'dhisResourceApi', function($resource) {
+         console.log("Factory");
+         var api = $resource(
+            //dhisAPI +
+               '/api/:id.json',
+            {}, // {callback:'JSON_CALLBACK'},
+            // TODO Remove headers before upload
+            {
+               get: {
+                     method:'JSONP',
+                     headers: {
+                        authorization: "Basic YWRtaW46ZGlzdHJpY3Q="
+                     }
+               },
+               save: {
+                  method:'POST',
+                  headers: {
+                     authorization: login
+                  }
+               }
+            }
+            );
+         return api;
+      });
+*/
+
+/* // Does not work, headers are not used when http is used through a service
+skipLogicServices.factory( 'dhisHttpApi', function($http) {
+      return {
+         fetch: function(callback) {
+            $http({
+               method: "JSONP",
+               url: // dhisAPI +
+                  '/api/programStages.json'// , // + id + '.json',
+            })
+            .success(callback);
+         }
+      };
+});
+*/
+
+
+// (Controllers)
+
+/* // Does not work with headers, not even trough reverseproxy
+skipLogicControls.controller('selectFormCtrl', ['$scope', '$resource', function($scope, $resource) {
+   var X = $resource(
+      //dhisAPI +
+         '/api/:id.json',
+      {}, // {callback:'JSON_CALLBACK'},
+      // TODO Remove headers before upload
+      {
+         get: {
+               method:'JSONP',
+               headers: {
+                  authorization: "Basic YWRtaW46ZGlzdHJpY3Q="
+               }
+         }
+      }
+      );
+
+   X.get({id:'programStages'}, function(result) {
+      $scope.dhisResult = result.programStages;
+   });
+}]);
+*/
+
+
+/* // 
+skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', 'dhisHttpApi', function($scope, $http, dhisHttpApi) {
+   dhisHttpApi.fetch(function(results) { //'programStages', function(results) {
+      $scope.dhisResult = results.programStages;
+   });
+}]);
+*/
+
+/* // This has worked (not this particular implementation, but the service is currently broken. Headers are disfunctional.
+skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', 'dhisResourceApi', function($scope, $http, dhisResourceApi) {
+   console.log("Controller");
+   dhisResourceApi.get({id: 'programStages'}, function(data) {
+      console.log(data);
+      $scope.dhisResult = data.programStages;
+   });
+//   var Api = dhisResourceApi();
+//   Api.action({});
+}]);
+*/
+
+
+
+//// Everything below here are notes
 
 /*
    $scope.dhisResult = [
