@@ -33,7 +33,7 @@ skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($sco
             'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q=" // login
          }
       }).success( function(data) {
-         console.log(data);
+//         console.log(data);
          $scope.dhisResult = data.programStages;
       });
 }]);
