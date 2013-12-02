@@ -39,6 +39,25 @@ skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($sco
 
 
 skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+//get data from form.
+
+    //When form is OK, copy contents to master.
+    $scope.master= {};
+
+    //Holds contents from form.
+    $scope.contents= {};
+
+    //Will update master with data form contents
+    $scope.update = function(contents) {
+        $scope.master= angular.copy(contents);
+    };
+
+    //Will empty contents.
+    $scope.reset = function() {
+        $scope.contents = {};
+    };
+
+
 
       $http({
          url: // dhisAPI +
@@ -53,9 +72,16 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams',
       }).success( function(data) {
 //         console.log(data);
          $scope.form = data;
+
       });
 
    // TODO
+
+
+
+
+
+
    }]);
 
 skipLogicControls.controller('editLogicCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
@@ -76,6 +102,8 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', '$http', '$routeParams'
       });
 
    // TODO
+
+
    }]);
 
 
