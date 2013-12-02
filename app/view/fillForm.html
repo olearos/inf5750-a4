@@ -1,3 +1,10 @@
 <h3>Filling in form {{form.name}}</h3>
 
+<table class="table table-striped">
+   <tr ng-repeat="dataElement in form.programStageDataElements">
+      <td>{{dataElement.dataElement.name}}</td>
+      <td><input name="{{dataElement.dataElement.id}}"/></td>
+   </tr>
+</table>
+
 <!-- TODO -->

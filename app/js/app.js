@@ -33,13 +33,28 @@ skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($sco
             'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q=" // login
          }
       }).success( function(data) {
-//         console.log(data);
          $scope.dhisResult = data.programStages;
       });
 }]);
 
 
-skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', function($scope, $http) {
+skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+
+      $http({
+         url: // dhisAPI +
+            '/api/programStages/' + $routeParams.formId + '.json',
+         method: "GET",
+         dataType: "json",
+         accept: "text/json",
+         withCredentials: "true",
+         headers: {
+            'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q=" // login
+         }
+      }).success( function(data) {
+//         console.log(data);
+         $scope.form = data;
+      });
+
    // TODO
    }]);
 
