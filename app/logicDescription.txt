@@ -1,0 +1,28 @@
+This is a description of the intended skip logic and the format for storing
+said logic.
+
+
+The main focus of the logic is to hide form elements that are irrellevant
+based on previous answers, or more precisely, to only show relevant fields.
+
+To achieve this, we apply a format which is able to give a field a list of
+requirements, hiding this field until the requirements are fulfilled.
+
+The base format is a JSON array on this form:
+
+[
+   "connectedFormId" : "<formId>",
+   "fields" : [ 
+      "fieldId" : "<fieldId>",
+      "fieldRequirements" : [
+         <requirement1>,
+         <requirement2>,
+         ... ]
+   ]
+]
+
+
+When the form is read, the logic is to be merged << is this possible? -LarsØ
+>> into the form data structure, so the logic can be applied.
+
+
