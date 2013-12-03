@@ -36,7 +36,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
 
 var skipLogicControls = angular.module( 'skipLogic.controllers', [] );
 
-skipLogicControls.controller( 'selectFormCtrl', [ '$scope', 'dhis', function( $scope, dhis ) {
+skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function( $scope, dhis ) {
 
    $scope.getStages = function( index ) {
       $scope.programStages = "";
@@ -144,8 +144,8 @@ skipLogic.config(function($routeProvider) {
       $routeProvider
 
         .when('/',
-            {controller: 'selectFormCtrl',
-               templateUrl: 'view/selectForm.html'})
+            {controller: 'selectProgramCtrl',
+               templateUrl: 'view/selectProgram.html'})
 
          .when('/fillForm/:formId',
             {controller: 'fillFormCtrl',
