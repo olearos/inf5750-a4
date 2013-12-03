@@ -1,6 +1,6 @@
-<h3>Please select program</h3>
-
+<p>Welcome to the skipLogic demo for DHIS2. Please select program for entry below</p>
 <div id="programs">
+   <!--   <p><strong>Please select program</strong></p>  -->
    <table class="table">
       <input type="text" placeholder="Filter programs" ng-model="programFilter" />
    </table>
@@ -13,7 +13,9 @@
 </div>
 
 <div id="programStages" ng-show="showStages">
-   <h4>Program: {{ selectedProgramName }}</h4>
+   <h3>{{ selectedProgramName }}</h3>
+   <p>You must now select the stage for your program. To view and change the logic, use the link on the right.</p>
+   <!--   <p><strong>Please select stage</strong><p>  -->
    <table class="table">
       <input type="text" placeholder="Filter stages" ng-model="programStageFilter" />
    </table>
