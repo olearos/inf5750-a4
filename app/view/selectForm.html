@@ -1,16 +1,14 @@
 <h3>Please select form</h3>
-<!-- <p>Recieved: 
-{{dhisResult}}
-</p>
-<p>Table:</p> -->
 
-<table class="table">
-   <input type="text" placeholder="Type to filter alternatives" ng-model="programFilter"></input>
-</table>
+<div id="programs">
+   <table class="table">
+      <input type="text" placeholder="Type to filter alternatives" ng-model="programFilter"></input>
+   </table>
 
-<table class="table table-striped">
-   <tr ng-repeat="program in dhisResult.programs | filter: programFilter | orderBy: name">
-      <td><a href="#/fillForm/{{program.id}}">{{program.name}}</a></td>
-      <td><a href="#/editLogic/{{program.id}}">(edit skipLogic)</a></td>
-   </tr>
-</table>
+   <table class="table table-striped">
+      <tr ng-repeat="program in programs.programs | filter: programFilter | orderBy: name">
+         <td><a href="#/fillForm/{{program.id}}">{{program.name}}</a></td>
+         <!--      <td><a href="#/editLogic/{{program.id}}">(edit skipLogic)</a></td>  -->
+      </tr>
+   </table>
+</div>

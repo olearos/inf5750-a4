@@ -12,33 +12,42 @@ var login = 'Basic ' + btoa( username + ":" + password);
 
 /// Services
 
-var skipLogicServices = angular.module( 'skipLogic.services', ['ngResource'] );
+var skipLogicServices = angular.module( 'skipLogic.services', [] );
+
+skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
+   return {
+      getData: function( target ) {
+         var deferred = $q.defer();
+
+         $http.get( '/api/' + target + '.json' )
+            .success( function( data, status, headers, config ) {
+//               console.log( data );
+               deferred.resolve( data );
+            }).error( function( data, status, headers, config ) {
+                  alert( "Error getting data:\n" + data );
+            });
+         return deferred.promise;
+      }
+   };
+}]);
 
 
 /// Controllers
 
-var skipLogicControls = angular.module('skipLogic.controllers', []);
+var skipLogicControls = angular.module( 'skipLogic.controllers', [] );
 
 // This works, but doesn't use a service which would be preferable
-skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($scope, $http) {
+skipLogicControls.controller( 'selectFormCtrl', [ '$scope', 'dhis', function( $scope, dhis ) {
 
-      $http({
-         url: // dhisAPI +
-            '/api/programs' + '.json',
-         method: "GET",
-         dataType: "json",
-         accept: "text/json",
-         withCredentials: "true",
-         headers: {
-            'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q=" // login
-         }
-      }).success( function(data) {
-         $scope.dhisResult = data;
-      });
+   dhis.getData( 'programs' )
+      .then( function( data ) {
+      $scope.programs = data;
+   });
+
 }]);
 
 
-skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
+skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
 //get data from form.
 
     //When form is OK, copy contents to master.
@@ -59,12 +68,17 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams',
 
     // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
 
-    //      url: // dhisAPI +
-    //'/api/programs/' + $routeParams.formId + '.json',
+    //http://localhost/api/programStages/Zj7UnCAulEk.json
+   dhis.getData( 'programs/' + $routeParams.formId )
+      .then( function( data ) {
+      $scope.form = data;
+   });
 
-
-        $http({
-         url: 'http://localhost/api/programStages/Zj7UnCAulEk.json',
+/*
+      $http({
+         url: // dhisAPI +
+            '/api/programs/' + $routeParams.formId + '.json',
+>>>>>>> eb105d37af1be8cf69e3502b716de713a15a537c
          method: "GET",
          dataType: "json",
          accept: "text/json",
@@ -78,38 +92,22 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams',
          $scope.master = data;
 
       });
-
-   // TODO
-
-
-
-
-
-
-   }]);
-
-skipLogicControls.controller('editLogicCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
-
-      $http({
-         url: // dhisAPI +
-            '/api/programs/' + $routeParams.formId + '.json',
-         method: "GET",
-         dataType: "json",
-         accept: "text/json",
-         withCredentials: "true",
-         headers: {
-            'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q=" // login
-         }
-      }).success( function(data) {
-//         console.log(data);
-         $scope.form = data;
-      });
-
+*/
    // TODO
 
 
    }]);
 
+skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
+
+   dhis.getData( 'programs/' + $routeParams.formId )
+      .then( function( data ) {
+      $scope.form = data;
+   });
+
+   // TODO
+
+   }]);
 
 
 /// Application module
@@ -117,8 +115,8 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', '$http', '$routeParams'
 var skipLogic =  angular.module('skipLogic', [
 //      'ngResource',
       'ngRoute',
-      'skipLogic.controllers',
       'skipLogic.services',
+      'skipLogic.controllers',
       ]);
 
 // Configure HTTP headers, this actually works, apart for Authorization :S
