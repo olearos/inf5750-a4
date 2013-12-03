@@ -1,14 +1,27 @@
-<h3>Please select form</h3>
+<h3>Please select program</h3>
 
 <div id="programs">
    <table class="table">
-      <input type="text" placeholder="Type to filter alternatives" ng-model="programFilter"></input>
+      <input type="text" placeholder="Filter programs" ng-model="programFilter" />
    </table>
 
    <table class="table table-striped">
       <tr ng-repeat="program in programs.programs | filter: programFilter | orderBy: name">
-         <td><a href="#/fillForm/{{program.id}}">{{program.name}}</a></td>
-         <!--      <td><a href="#/editLogic/{{program.id}}">(edit skipLogic)</a></td>  -->
+         <td><a ng-click="getStages( $index )">{{ program.name }}</a></td>
+      </tr>
+   </table>
+</div>
+
+<div id="programStages" ng-show="showStages">
+   <h4>Program: {{ selectedProgramName }}</h4>
+   <table class="table">
+      <input type="text" placeholder="Filter stages" ng-model="programStageFilter" />
+   </table>
+
+   <table class="table table-striped">
+      <tr ng-repeat="stage in programStages.programStages | filter: programStageFilter | orderBy: name">
+         <td><a href="#/fillForm/{{ stage.id }}">{{stage.name}}</a></td>
+         <td><a href="#/editLogic/{{ stage.id }}">(edit skipLogic)</a></td>
       </tr>
    </table>
 </div>

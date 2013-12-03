@@ -24,7 +24,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
 //               console.log( data );
                deferred.resolve( data );
             }).error( function( data, status, headers, config ) {
-                  alert( "Error getting data:\n" + data );
+                  alert( "Error getting data:\n" + status );
             });
          return deferred.promise;
       }
@@ -36,8 +36,20 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
 
 var skipLogicControls = angular.module( 'skipLogic.controllers', [] );
 
-// This works, but doesn't use a service which would be preferable
 skipLogicControls.controller( 'selectFormCtrl', [ '$scope', 'dhis', function( $scope, dhis ) {
+
+   $scope.getStages = function( index ) {
+      $scope.programStages = "";
+      $scope.selectedProgramName = $scope.programs.programs[index].name;
+      $scope.showStages = true;
+      
+      dhis.getData( 'programs/' + $scope.programs.programs[index].id )
+         .then( function( data ) {
+            $scope.programStages = data;
+      });
+   };
+
+   $scope.showStages = false;
 
    dhis.getData( 'programs' )
       .then( function( data ) {
