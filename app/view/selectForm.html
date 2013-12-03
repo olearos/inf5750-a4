@@ -5,12 +5,12 @@
 <p>Table:</p> -->
 
 <table class="table">
-   <input type="text" placeholder="Type to filter alternatives" ng-model="formFilter"></input>
+   <input type="text" placeholder="Type to filter alternatives" ng-model="programFilter"></input>
 </table>
 
 <table class="table table-striped">
-   <tr ng-repeat="form in dhisResult | filter: formFilter | orderBy: name">
-      <td><a href="#/fillForm/{{form.id}}">{{form.name}}</a></td>
-      <td><a href="#/editLogic/{{form.id}}">(edit skipLogic)</a></td>
+   <tr ng-repeat="program in dhisResult.programs | filter: programFilter | orderBy: name">
+      <td><a href="#/fillForm/{{program.id}}">{{program.name}}</a></td>
+      <td><a href="#/editLogic/{{program.id}}">(edit skipLogic)</a></td>
    </tr>
 </table>

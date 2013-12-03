@@ -24,7 +24,7 @@ skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($sco
 
       $http({
          url: // dhisAPI +
-            '/api/programStages' + '.json',
+            '/api/programs' + '.json',
          method: "GET",
          dataType: "json",
          accept: "text/json",
@@ -33,7 +33,7 @@ skipLogicControls.controller('selectFormCtrl', ['$scope', '$http', function($sco
             'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q=" // login
          }
       }).success( function(data) {
-         $scope.dhisResult = data.programStages;
+         $scope.dhisResult = data;
       });
 }]);
 
@@ -61,7 +61,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', '$http', '$routeParams',
 
       $http({
          url: // dhisAPI +
-            '/api/programStages/' + $routeParams.formId + '.json',
+            '/api/programs/' + $routeParams.formId + '.json',
          method: "GET",
          dataType: "json",
          accept: "text/json",
@@ -88,7 +88,7 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', '$http', '$routeParams'
 
       $http({
          url: // dhisAPI +
-            '/api/programStages/' + $routeParams.formId + '.json',
+            '/api/programs/' + $routeParams.formId + '.json',
          method: "GET",
          dataType: "json",
          accept: "text/json",
