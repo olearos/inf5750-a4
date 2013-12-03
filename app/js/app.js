@@ -72,6 +72,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
    dhis.getData( 'programs/' + $routeParams.formId )
       .then( function( data ) {
       $scope.form = data;
+      $scope.master = data;
    });
 
 /*
