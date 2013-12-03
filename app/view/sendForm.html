@@ -1,0 +1,45 @@
+<h3>Sending form "{{form.name}}"</h3>
+
+<script>
+  
+  function getUserOrg() {
+     $.ajax({
+        type : "GET",
+        url : "../../api/currentUser.json",
+        dataType : "json",
+     })
+     .fail(funtion(error) {
+        alert("No user info!");
+     })
+     .done(function (json) {
+        return json.organisationUnits.id;
+     });
+  }
+  
+  
+  var date = getFullYear() + "-" + getMonth()+1 + "-" + getDate();
+  var period = getFullYear() + "" + getMonth()+1;
+  var xmlString = '<dataValueSet xmlns=&quothttp://dhis2.org/schema/dxf/2.0&quot dataSet=&quot' + {{form.id}} + 
+		     'completeDate=&quot' + date + '&quot period=&quot' + period + '&quot orgUnit=&quot' + getUserOrg() + '&quot>';
+                     
+  <!-- Set dataValue dataElement="" value="" -->
+  
+  xmlString = xmlString + '</dataValueSet>'
+
+  <!-- When pressing button for sending in --->
+  $('myForm').submit(function() {
+     $.ajax({
+        type : "POST",
+        data : xmlString,
+        contentType : "application/xml",
+        url : "http://apps.dhis2.org/demo/api/dataValueSets",
+        dataType : "xml",
+     })
+     .fail(function(error) {
+        alert("Sending of form failed!");
+     })
+     .done(function (message) {
+        alert(message);<!-- Check for return message--->
+     });
+  });
+</script>
