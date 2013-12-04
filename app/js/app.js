@@ -5,6 +5,7 @@
 var username = 'admin';
 var password = 'district';
 var dhisAPI = 'http://apps.dhis2.org/demo';
+var orgUnit = "g8upMTyEZGZ";  // ID for Njandama MCHP
 
 var login = 'Basic ' + btoa( username + ":" + password);
 
