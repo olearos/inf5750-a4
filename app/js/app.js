@@ -19,12 +19,30 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
          var deferred = $q.defer();
 
          $http.get( '/api/' + target + '.json' )
-            .success( function( data, status, headers, config ) {
-               deferred.resolve( data );
-            }).error( function( data, status, headers, config ) {
-                  alert( "Error getting data:\n" + status );
-            });
+         .success( function( data, status, headers, config ) {
+            deferred.resolve( data );
+         })
+         .error( function( data, status, headers, config ) {
+            alert( "Error getting data:\n" + status );
+            deferred.reject();
+         });
+
          return deferred.promise;
+      },
+
+   // TODO Actually test this...
+      saveData: function( target, data ) {
+         var deferred = $q.defer();
+
+         $http.post( '/api/' + target, data )
+         .success( function( data, status, headers, config ) {
+            alert( "Save success\n" + data );
+            deferred.resolve( data, status, headers, config );
+         })
+         .error( function(  data, status, headers, config ) {
+            alert( "Save failed\n" + data );
+            deferred.reject( data, status, headers, config);
+         });
       }
    };
 }]);
