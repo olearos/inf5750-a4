@@ -81,17 +81,41 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
 
     //http://localhost/api/programStages/Zj7UnCAulEk.json
-   dhis.getData( 'programs/' + $routeParams.formId )
+   /*dhis.getData( 'programs/' + $routeParams.formId )
       .then( function( data ) {
       $scope.form = data;
       $scope.master = data;
-   });
+   });*/
+    $scope.urlole = "";
+    dhis.getData( 'programStages/' + $routeParams.formId )
+        .then( function( data ) {
 
+            $scope.master= data;
+            var x = "";
+
+            for(x in data.programStageDataElements)  {
+                $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
+                $scope.contents += $scope.urlole;
+                dhis.getData(url).then(
+                    function(data) {
+                        $scope.contents += data.name;
+                    }
+                );
+
+            }
+        });
+
+    /*$scope.getStages = function( index ) {
+        dhis.getData( 'programs/' + $routeParams.formId )
+            .then( function( data ) {
+                $scope.contents = data;
+        });
+    };*/
 /*
       $http({
          url: // dhisAPI +
             '/api/programs/' + $routeParams.formId + '.json',
->>>>>>> eb105d37af1be8cf69e3502b716de713a15a537c
+
          method: "GET",
          dataType: "json",
          accept: "text/json",
