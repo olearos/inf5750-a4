@@ -115,8 +115,22 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
    $scope.urlole = "";
     $scope.oledata = [];
-   
-   dhis.getData( 'programStages/' + $routeParams.formId )
+
+
+    /* ------- SKIP LOGIC -------- */
+
+        $scope.skipLogic = [{
+           "fields": {
+                "qrur9Dvnyt5": {
+                    ">=" : "15"
+                }
+           }
+        }];
+        //$scope.skipLogic["oZg33kd9taw"] = [fields];
+
+    /* ------- /SKIP LOGIC -------- */
+
+    dhis.getData( 'programStages/' + $routeParams.formId )
    .then( function( data ) {
       $scope.master= data;
 
@@ -132,9 +146,10 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             //$scope.contents += data.id + ', ';
             $scope.oledata = data;
             //Will hide "Age"
-            if(data.id == "qrur9Dvnyt5" )$scope.oledata['show'] = false;
+            if(data.id == "XXXqrur9Dvnyt5" )$scope.oledata['show'] = false;
             else $scope.oledata['show'] = true;
 
+            //$scope.oledata['skipLogic'] = $scope.skipLogic[data.id];
             // TODO: JQuery? - In WebStorm, push seems to be a part of JQuery. (possible problem)
             //$scope.form.push(data);
               $scope.form.push($scope.oledata);
