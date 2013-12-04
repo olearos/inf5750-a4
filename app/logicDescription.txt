@@ -15,14 +15,28 @@ The base format is a JSON array on this form:
    "fields" : [ 
       "fieldId" : "<fieldId>",
       "fieldRequirements" : [
-         <requirement1>,
-         <requirement2>,
+         <requirement>,
+         <requirement>,
          ... ]
    ]
 ]
 
+Format for requirement:
+[
+   "fieldId" : "<fieldId>",
+   requirements : [
+      "<operator>" : "<value">,
+      ... ]
+]
 
-When the form is read, the logic is to be merged << is this possible? -LarsØ
->> into the form data structure, so the logic can be applied.
+Valid operators:
+== < > <= >=
+
+The type of available operators is governed by the logic editor, but should
+also be validated by the form display (e.g. comparing strings with <, should
+be ignored).
+
+When the form is read, the logic is to be merged into the form data structure,
+so the logic can be applied.
 
 
