@@ -92,11 +92,12 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             var x = "";
 
             for(x in data.programStageDataElements)  {
-                $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
-                $scope.contents += $scope.urlole;
-                dhis.getData(url).then(
+               $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
+
+                //$scope.contents += $scope.urlole;
+                dhis.getData('dataElements/' + data.programStageDataElements[x].dataElement.id).then(
                     function(data) {
-                        $scope.contents += data.name;
+                        $scope.contents += data.name + ', ';
                     }
                 );
             };
