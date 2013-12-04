@@ -119,13 +119,29 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     /* ------- SKIP LOGIC -------- */
 
-        $scope.skipLogic = [{
+       /* $scope.skipLogic = [{
            "fields": {
                 "qrur9Dvnyt5": {
                     ">=" : "15"
                 }
            }
-        }];
+        }]; */
+
+        /* Idea in general.
+            - array, fields,  of all fields that requires something to be printed.
+            - each field contains an array of the requirements 
+        */
+        var fields = [];
+
+        fields['Age'];
+        var arr = ["fields",
+                    "discharge_date"];
+
+
+        var fields = [];
+        fields['gender'] = ["15", "=>"];
+        fields['diagnosis'] = "Flu";
+
         //$scope.skipLogic["oZg33kd9taw"] = [fields];
 
     /* ------- /SKIP LOGIC -------- */
