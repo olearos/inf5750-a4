@@ -1,4 +1,21 @@
 <h3>Filling in form {{form.name}}</h3>
+<h4>{{form.description}}</h4>
+
+<form class="simple-form">
+
+    <table class="table table-striped">
+        <tr ng-repeat="dataElement in form">
+            <td ng-show="dataElement.show">{{dataElement.name}}<span style="color:red" ng-show="dataElement.compulsory"><strong> *</strong></span></td>
+            <td ng-show="dataElement.show"><input ng-model="contents[dataElement.id]" ng-required="{{dataElement.compulsory}}" /></td>
+        </tr>
+    </table>
+    <button ng-click="reset()">RESET</button>
+    <button ng-click="update(contents)">SAVE</button>
+</form>
+<hr>
+
+<!--
+<h3>Filling in form {{form.name}}</h3>
         <h4>{{form.description}}</h4>
 
 <form class="simple-form">
@@ -13,7 +30,9 @@
     <button ng-click="update(contents)">SAVE</button>
 </form>
         <hr>
-
+-->
 <!-- Shows output from contents and master for debug purposes -->
-<pre>contents = {{contents | json}}</pre>
-<pre>master = {{master | json}}</pre>
+<pre ng-show="debug">contents = {{contents | json}}</pre>
+<pre ng-show="debug">form = {{form | json}}</pre>
+<pre ng-show="debug">master = {{master | json}}</pre>
+
