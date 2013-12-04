@@ -79,6 +79,10 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
 skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
 //get data from form.
 
+
+
+    $scope.form = [];
+    $scope.debug = true;
     //When form is OK, copy contents to master.
     $scope.master= {};
 
@@ -95,6 +99,11 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         $scope.contents = {};
     };
 
+    //TODO: Remove? Currently unused
+    $scope.show = function(dataElement) {
+        return dataElement.show;
+    }
+
     // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
 
     //http://localhost/api/programStages/Zj7UnCAulEk.json
@@ -105,19 +114,33 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
    });*/
 
    $scope.urlole = "";
+    $scope.oledata = [];
    
    dhis.getData( 'programStages/' + $routeParams.formId )
    .then( function( data ) {
       $scope.master= data;
-      var x = "";
 
-      for(x in data.programStageDataElements)  {
+       $scope.form.name = data.name;
+       $scope.form.description = data.description;
+       var x = "";
+       for(x in data.programStageDataElements)  {
          $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
 
          //$scope.contents += $scope.urlole;
          dhis.getData('dataElements/' + data.programStageDataElements[x].dataElement.id)
          .then(function(data) {
-            $scope.contents += data.name + ', ';
+            //$scope.contents += data.id + ', ';
+            $scope.oledata = data;
+            //Will hide "Age"
+            if(data.id == "qrur9Dvnyt5" )$scope.oledata['show'] = false;
+            else $scope.oledata['show'] = true;
+
+            // TODO: JQuery? - In WebStorm, push seems to be a part of JQuery. (possible problem)
+            //$scope.form.push(data);
+              $scope.form.push($scope.oledata);
+              $scope.master.push($scope.oledata);
+
+
          });
       };
    });
@@ -129,7 +152,7 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
 
    dhis.getData( 'programs/' + $routeParams.formId )
       .then( function( data ) {
-      $scope.form = data;
+        $scope.form = data;
    });
 
    // TODO
