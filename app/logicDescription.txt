@@ -10,21 +10,16 @@ requirements, hiding this field until the requirements are fulfilled.
 
 The base format is a JSON array on this form:
 
-[
+[{
     "connectedFormId" : "<formId>",
-    "fields" : [
-        "<fieldId>" : [
-            "<operator>" : "<value>">,
-            "<operator>" : "<value>">,
-            ...
-        ]
-        "<fieldId>" : [
-            "<operator>" : "<value>">,
-            ...
-        ]
-        ...
-    ]
-]
+    "fields" : {
+        "<fieldId>" : {
+            "<fieldIdComp>" : {
+                "<operator>" : "<value>">
+            }
+        }
+    }
+}];
 
 
 Valid operators:
