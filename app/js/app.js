@@ -102,28 +102,27 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
       $scope.form = data;
       $scope.master = data;
    });*/
-    $scope.urlole = "";
-    dhis.getData( 'programStages/' + $routeParams.formId )
-        .then( function( data ) {
 
-            $scope.master= data;
-            var x = "";
+   $scope.urlole = "";
+   
+   dhis.getData( 'programStages/' + $routeParams.formId )
+   .then( function( data ) {
+      $scope.master= data;
+      var x = "";
 
-            for(x in data.programStageDataElements)  {
-               $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
+      for(x in data.programStageDataElements)  {
+         $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
 
-                //$scope.contents += $scope.urlole;
-                dhis.getData('dataElements/' + data.programStageDataElements[x].dataElement.id).then(
-                    function(data) {
-                        $scope.contents += data.name + ', ';
-                    }
-                );
-            };
-        })
+         //$scope.contents += $scope.urlole;
+         dhis.getData('dataElements/' + data.programStageDataElements[x].dataElement.id)
+         .then(function(data) {
+            $scope.contents += data.name + ', ';
+         });
+      };
+   });
    // TODO
 
-
-   }]);
+}]);
 
 skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
 
