@@ -194,33 +194,39 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
 /// Application module
 
 var skipLogic =  angular.module('skipLogic', [
-      'ngRoute',
-      'skipLogic.services',
-      'skipLogic.controllers',
-      ]);
+    'ngRoute',
+    'skipLogic.services',
+    'skipLogic.controllers',
+]);
 
 skipLogic.config(function($httpProvider) {
-   $httpProvider.defaults.headers.common = {
-      'Accept': 'application/json, text/plain, * / *',
-      'Data': '',
-      'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q="};
+    $httpProvider.defaults.headers.common = {
+        'Accept': 'application/json, text/plain, * / *',
+        'Data': '',
+        'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q="
+    };
 });
 
 skipLogic.config(function($routeProvider) {
-      $routeProvider
+    $routeProvider
 
-        .when('/',
-            {controller: 'selectProgramCtrl',
-               templateUrl: 'view/selectProgram.html'})
+    .when( '/', {
+        controller:     'selectProgramCtrl',
+        templateUrl:    'view/selectProgram.html'
+    })
 
-         .when('/fillForm/:formId',
-            {controller: 'fillFormCtrl',
-               templateUrl: 'view/fillForm.html'})
+    .when( '/fillForm/:formId', {
+        controller:     'fillFormCtrl',
+        templateUrl:    'view/fillForm.html'
+    })
 
-         .when('/editLogic/:formId',
-            {controller: 'editLogicCtrl',
-               templateUrl: 'view/editLogic.html'})
+    .when('/editLogic/:formId', {
+        controller:     'editLogicCtrl',
+        templateUrl:    'view/editLogic.html'
+    })
 
-         .otherwise({redirectTo:'/'});
-   });
+    .otherwise( {
+        redirectTo:     '/'
+    });
+});
 
