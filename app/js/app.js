@@ -59,16 +59,16 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
       $scope.selectedProgramName = $scope.programs.programs[index].name;
       
       dhis.getData( 'programs/' + $scope.programs.programs[index].id )
-         .then( function( data ) {
-            $scope.programStages = data;
-            $scope.showStages = true;
+      .then( function( data ) {
+         $scope.programStages = data;
+         $scope.showStages = true;
       });
    };
 
    $scope.showStages = false;
 
    dhis.getData( 'programs' )
-      .then( function( data ) {
+   .then( function( data ) {
       $scope.programs = data;
    });
 
