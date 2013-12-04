@@ -11,23 +11,21 @@ requirements, hiding this field until the requirements are fulfilled.
 The base format is a JSON array on this form:
 
 [
-   "connectedFormId" : "<formId>",
-   "fields" : [ 
-      "fieldId" : "<fieldId>",
-      "fieldRequirements" : [
-         <requirement>,
-         <requirement>,
-         ... ]
-   ]
+    "connectedFormId" : "<formId>",
+    "fields" : [
+        "<fieldId>" : [
+            "<operator>" : "<value>">,
+            "<operator>" : "<value>">,
+            ...
+        ]
+        "<fieldId>" : [
+            "<operator>" : "<value>">,
+            ...
+        ]
+        ...
+    ]
 ]
 
-Format for requirement:
-[
-   "fieldId" : "<fieldId>",
-   requirements : [
-      "<operator>" : "<value">,
-      ... ]
-]
 
 Valid operators:
 == < > <= >=
