@@ -130,6 +130,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
          .then(function(data) {
             //$scope.contents += data.id + ', ';
             $scope.oledata = data;
+            //Will hide "Age"
             if(data.id == "qrur9Dvnyt5" )$scope.oledata['show'] = false;
             else $scope.oledata['show'] = true;
 
