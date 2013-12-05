@@ -114,7 +114,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
    });*/
 
    $scope.urlole = "";
-    $scope.oledata = [];
+   $scope.oledata = [];
 
 
     /* ------- SKIP LOGIC -------- */
