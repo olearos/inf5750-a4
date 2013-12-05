@@ -8,22 +8,27 @@ based on previous answers, or more precisely, to only show relevant fields.
 To achieve this, we apply a format which is able to give a field a list of
 requirements, hiding this field until the requirements are fulfilled.
 
+
 The base format is a JSON array on this form:
 
-[{
+{
     "connectedFormId" : "<formId>",
     "fields" : {
-        "<fieldId>" : {
-            "<fieldIdComp>" : {
-                "<operator>" : "<value>">
+        "id" : "<fieldId>",
+        "compFields" : {
+            "compFieldId" : "<fieldIdComp>",
+            "requirements" : {
+                "operator" : "<operator>",
+                "value" : "<value>"
             }
         }
     }
-}];
+};
 
 
 Valid operators:
-== < > <= >=
+== != < > <= >=
+
 
 The type of available operators is governed by the logic editor, but should
 also be validated by the form display (e.g. comparing strings with <, should

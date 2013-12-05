@@ -10,6 +10,16 @@ var orgUnit = "g8upMTyEZGZ";  // ID for Njandama MCHP
 var login = 'Basic ' + btoa( username + ":" + password);
 
 
+var operators = {
+    "==" :  0,
+    "!=" :  1,
+    "<"  :  2,
+    "<=" :  3,
+    ">"  :  4,
+    ">=" :  5
+};
+
+
 /// Services
 
 var skipLogicServices = angular.module( 'skipLogic.services', [] );
@@ -79,12 +89,42 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
 skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
 //get data from form.
 
+    // Skip logic function
+    $scope.showQuestion = function( item ) {
+        if ( !item.logic )
+            return true;
 
+        // TODO check if requirements for item are fulfilled
+        // return false for first found mismatch
+        for ( var compField in item.logic ) {
+            for ( var requirement in item.logic[ compField ] ) {
+                switch( item.logic[ compField ][ requirement ] ) {
+                    case 0: // ==
+                        break;
+                    case 1: // !=
+                        break;
+                    case 2: // <
+                        break;
+                    case 3: // <=
+                        break;
+                    case 4: // >
+                        break;
+                    case 5: // >=
+                        console.log( "showQuestion recieved >= operator" );
+                        break;
+                    default:
+                        console.log( "Invalid skipLogic operator" );
+                }
+            }
+        }
 
-    $scope.form = [];
+        return true;
+    };
+
+    $scope.form = {};
     $scope.debug = true;
-    //When form is OK, copy contents to master.
-    $scope.master= {};
+// Form is now the data shown, master is used only to display raw json from request
+    $scope.master= [];
 
     //Holds contents from form.
     $scope.contents= {};
@@ -107,88 +147,104 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
 
     //http://localhost/api/programStages/Zj7UnCAulEk.json
-   /*dhis.getData( 'programs/' + $routeParams.formId )
+    /*dhis.getData( 'programs/' + $routeParams.formId )
       .then( function( data ) {
       $scope.form = data;
       $scope.master = data;
-   });*/
+    });*/
 
-   $scope.urlole = "";
+//    $scope.urlole = "";
     $scope.oledata = [];
 
+    $scope.temp = {};
 
     /* ------- SKIP LOGIC -------- */
 
-       /* $scope.skipLogic = [{
-           "fields": {
-                "qrur9Dvnyt5": {
-                    ">=" : "15"
-                }
-           }
-        }]; */
-
-        /* Idea in general.
-            - array, fields,  of all fields that requires something to be printed.
-            - each field contains an array of the requirements 
-        */
-        var fields = [];
-
-        fields['Age'];
-        var arr = ["fields",
-                    "discharge_date"];
-
-
-        var fields = [];
-        fields['gender'] = ["15", "=>"];
-        fields['diagnosis'] = "Flu";
-
-        //$scope.skipLogic["oZg33kd9taw"] = [fields];
+    $scope.skipLogic = 
+    {
+        "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
+        "fields" : [{
+            "id" : "oZg33kd9taw",               // Gender
+            "compFields" : [{
+                "compFieldId" :"qrur9Dvnyt5",   // Age
+                "requirements" : [{
+                    "operator" : ">=",          // Comparison operator
+                    "value" : 15                // Comparison value
+                }]
+            }]
+        }]
+    };
 
     /* ------- /SKIP LOGIC -------- */
 
+                
+
     dhis.getData( 'programStages/' + $routeParams.formId )
-   .then( function( data ) {
-      $scope.master= data;
+    .then( function( data ) {
+//        $scope.master = data;
 
-       $scope.form.name = data.name;
-       $scope.form.description = data.description;
-       var x = "";
-       for(x in data.programStageDataElements)  {
-         $scope.urlole = 'dataElements/' + data.programStageDataElements[x].dataElement.id;
+        $scope.form = data;
 
-         //$scope.contents += $scope.urlole;
-         dhis.getData('dataElements/' + data.programStageDataElements[x].dataElement.id)
-         .then(function(data) {
-            //$scope.contents += data.id + ', ';
-            $scope.oledata = data;
-            //Will hide "Age"
-            if(data.id == "XXXqrur9Dvnyt5" )$scope.oledata['show'] = false;
-            else $scope.oledata['show'] = true;
+        // Loop through elements
+        for ( var x in data.programStageDataElements )  {
+            console.log( "Looping through x=" + x );
 
-            //$scope.oledata['skipLogic'] = $scope.skipLogic[data.id];
-            // TODO: JQuery? - In WebStorm, push seems to be a part of JQuery. (possible problem)
-            //$scope.form.push(data);
-              $scope.form.push($scope.oledata);
-              $scope.master.push($scope.oledata);
+            // Check if skipLogic exists for element, add as logic key
+            for ( var f in $scope.skipLogic.fields ) {
+                if ( $scope.skipLogic.fields[ f ].id === $scope.form.programStageDataElements[ x ].dataElement.id ) {
+                    console.log( "Found skipLogic for " + $scope.form.programStageDataElements[ x ].dataElement.id );
+                    $scope.form.programStageDataElements[ x ]["logic"] =
+                        $scope.skipLogic.fields[ f ].compFields;
+                    console.log( "Added logic: " + $scope.skipLogic.fields[ f ].compFields );
+                }
+            }
+
+            // Fetch extra element data
+            dhis.getData( 'dataElements/' + data.programStageDataElements[ x ].dataElement.id )
+            .then( function( fieldData ) {
+                // Store extra element data as parameters
+                // FIXME This gets called every time, but the variable x has been updated to 5 (max) when the calls return.
+                // Results are overwritten, probably a chance result of which we end up with
+                console.log( "Got parameters " + x );
+                $scope.form.programStageDataElements[ x ]["parameters"] = fieldData;
 
 
-         });
-      };
-   });
-   // TODO
+                //$scope.contents += data.id + ', ';
+                //$scope.oledata = data;
+                //Will hide "Age"
+/*                if ( data.id == "XXXqrur9Dvnyt5" )
+                    $scope.oledata['show'] = false;
+                else
+                    $scope.oledata['show'] = true;
+*/
+                //$scope.oledata['skipLogic'] = $scope.skipLogic[data.id];
+    // JQuery? - In WebStorm, push seems to be a part of JQuery. (possible problem)
+    // A: .push is a js function, but only for arrays (?)
+    // $scope.form.push -> ok, because form is an array
+    // $scope.master.push -> fail, because master is an object
+
+
+//                $scope.form.push($scope.oledata);
+//                $scope.master.push($scope.oledata);
+
+
+            });
+        };
+    });
+
 
 }]);
 
 skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
 
-   dhis.getData( 'programs/' + $routeParams.formId )
-      .then( function( data ) {
+   dhis.getData( 'programStages/' + $routeParams.formId )
+   .then( function( data ) {
         $scope.form = data;
    });
 
    // TODO
 
-   }]);
+}]);
 
 
 /// Application module
