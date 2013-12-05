@@ -91,25 +91,39 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     // Skip logic function
     $scope.showQuestion = function( item ) {
-        if ( !item.logic )
+        if ( ! item.logic )
             return true;
 
         // TODO check if requirements for item are fulfilled
         // return false for first found mismatch
         for ( var compField in item.logic ) {
-            for ( var requirement in item.logic[ compField ] ) {
-                switch( item.logic[ compField ][ requirement ] ) {
-                    case 0: // ==
+
+            var compValue = $scope.contents[ compField ];
+            if ( ! compValue ) return false;
+
+            for ( var requirement in item.logic[ compField ].requirements ) {
+
+                var reqValue = item.logic[ compField ].requirements[ requirement ].value;
+                console.log( "showQuestion: " + compValue + " " + item.logic[ compField ].requirements[ requirement ].operator + " " + reqValue );
+
+                switch( operators[ item.logic[ compField ].requirements[ requirement ].operator ] ) {
+                    case operators["=="]:
+                        if ( ! compValue === reqValue ) return false;
                         break;
-                    case 1: // !=
+                    case operators["!="]:
+                        if ( ! compValue !== reqValue ) return false;
                         break;
-                    case 2: // <
+                    case operators["<"]:
+                        if ( ! compValue < reqValue ) return false;
                         break;
-                    case 3: // <=
+                    case operators["<="]:
+                        if ( ! compValue <= reqValue ) return false;
                         break;
-                    case 4: // >
+                    case operators[">"]:
+                        if ( ! compValue > reqValue ) return false;
                         break;
-                    case 5: // >=
+                    case operators[">="]:
+                        if ( ! compValue >= reqValue ) return false;
                         console.log( "showQuestion recieved >= operator" );
                         break;
                     default:
