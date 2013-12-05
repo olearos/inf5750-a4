@@ -155,7 +155,6 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
 //    $scope.urlole = "";
     $scope.oledata = [];
-
     $scope.temp = {};
 
     /* ------- SKIP LOGIC -------- */
