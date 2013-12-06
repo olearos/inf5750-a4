@@ -46,9 +46,33 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
       saveData: function( target, data ) {
          var deferred = $q.defer();
          //Running as app in DHIS, /api/ must be changed to /demo/api/.
-         $http.post( '/api/' + target, data )
+
+          /* -------- SAMPLE DATA ENTRY --------- */
+          var payload = {
+              "program": "eBAyeGv0exc",
+              "orgUnit": "DiszpKrYNg8",
+              "eventDate": "2013-05-17",
+              "status": "COMPLETED",
+              "storedBy": "admin",
+              "coordinate": {
+              "latitude": "59.8",
+                  "longitude": "10.9"
+          },
+              "dataValues": [
+              { "dataElement": "qrur9Dvnyt5", "value": "22" },
+              { "dataElement": "oZg33kd9taw", "value": "Male" },
+              { "dataElement": "msodh3rEMJa", "value": "2013-05-18" }
+          ]
+          };
+
+
+          data = payload;
+          /* -------- /SAMPLE DATA ENTRY --------- */
+
+          var headers = "Content-Type:application/json";
+          $http.post( '/api/' + target, data )
          .success( function( data, status, headers, config ) {
-            alert( "Save success\n" + data );
+            alert( "Save success\n" + angular.toJson(data) );
             deferred.resolve( data, status, headers, config );
          })
          .error( function(  data, status, headers, config ) {
@@ -192,12 +216,12 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     //Function for sending data from form to DHIS and prepare form for new entry
     $scope.deliver = function() {
         $scope.form.isSent = true;
-        /*dhis.saveData($scope.form)
-            .then( function(report) {
+        dhis.saveData("/events/" , $scope.form)
+            .then( function() {
                 console.log("Data is sent to DHIS");
 
             }
-        ) */
+        )
         $scope.clearForm();
     }
 
