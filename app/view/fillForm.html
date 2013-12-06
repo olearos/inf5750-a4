@@ -1,39 +1,25 @@
+<div ng-show="form.isSent" class="information text-info"><h3>Thank you, your entry is received!</h3></div>
 <h3>Filling in form {{form.name}}</h3>
 <h4>{{form.description}}</h4>
+
 
 <form class="simple-form">
 
     <table class="table table-striped">
         <tr ng-repeat="element in form.programStageDataElements | filter: show:true">
-            <td>{{element.dataElement.name}}<span style="color:red" ng-show="element.compulsory"><strong> *</strong></span></td>
+            <td>{{element.dataElement.name}}<span class="required" ng-show="element.compulsory"><strong> *</strong></span></td>
             <td><input ng-model="element.input" ng-required="{{element.compulsory}}" ng-change="updateForm()" /></td>
         </tr>
     </table>
-    <button ng-click="update(contents)">SAVE</button>
-    <button ng-click="reset()">RESET</button>
+    <button ng-click="deliver()">Save</button>
+    <button ng-click="clearForm()">Empty</button>
 </form>
 <hr>
 
-<!--
-<h3>Filling in form {{form.name}}</h3>
-        <h4>{{form.description}}</h4>
 
-<form class="simple-form">
-
-    <table class="table table-striped">
-        <tr ng-repeat="dataElement in form.programStageDataElements">
-            <td>{{dataElement.dataElement.name}}<span style="color:red" ng-show="dataElement.compulsory"><strong> *</strong></span></td>
-            <td><input ng-model="contents[dataElement.dataElement.id]" ng-required="{{dataElement.compulsory}}" /></td>
-        </tr>
-    </table>
-    <button ng-click="reset()">RESET</button>
-    <button ng-click="update(contents)">SAVE</button>
-</form>
-        <hr>
--->
-<!-- Shows output from contents and master for debug purposes -->
-<pre ng-show="debug">contents = {{contents | json}}</pre>
+<!-- Shows output from form and skipLogic for debug purposes -->
+<pre ng-show="debug">payload= {{payload | json}}</pre>
 <pre ng-show="debug">form = {{form | json}}</pre>
-<!--    <pre ng-show="debug">master = {{master | json}}</pre>   -->
 <pre ng-show="debug">skipLogic = {{skipLogic | json}}</pre>
+
 

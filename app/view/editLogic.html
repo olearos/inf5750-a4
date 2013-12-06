@@ -1,10 +1,29 @@
 <h3>Editing logic for form "{{form.name}}"</h3>
 
 
+<form>
+  <textarea json rows="13"  cols="50" ng-model="inputText" ></textarea>
+  
+  <button ng-click="updateText(inputText)">Save</button>
+</form>
+
+  
+
+
+<pre>inputText = {{inputText | json}}</pre>
+<pre>testLogic = {{testLogic | json}}</pre>
+
+<!---
+<textarea rows="13"  cols="50" ng-model="inputText">
+<span ng-bind="name"> </span>
+</textarea>
+-->
+
 <table class="table table-striped">
    <tr ng-repeat="dataElement in form.programStageDataElements">
       <td>{{dataElement.dataElement.name}}</td>
       <td><input name="{{dataElement.dataElement.id}}"/></td>
+      <td><input type="checkbox" ng-model="element.show" ng-change="updateForm()"></td>
    </tr>
 </table>
 
