@@ -170,7 +170,14 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         }
     };
 
-    // Filter for skipLogic
+    //Function for updating form display, ie. removing previous input.
+    $scope.clearForm = function() {
+        for ( var element in $scope.form.programStageDataElements ) {
+            $scope.form.programStageDataElements[ element ].input = null;
+        }
+    };
+
+    // Filter for skipLogic - used for filtering questions.
     $scope.show = function(dataElement) {
         return dataElement.show;
     }
@@ -178,7 +185,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     // Main data container
     $scope.form = {};
-    
+    if($scope.form.isSent == null) $scope.form.isSent = false;
     // Show/Hide debug output (raw data containers)
     $scope.debug = true;
 
@@ -186,19 +193,26 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     $scope.contents= {};
     $scope.master = {};
 
-    //Will update master with data form contents
-    $scope.update = function(contents) {
-        $scope.master= angular.copy(contents);
-    };
 
-    //Will empty contents.
+    //Will send data from form to DHIS.
+    $scope.deliver = function() {
+        $scope.form.isSent = true;
+        /*dhis.saveData($scope.form)
+            .then( function(report) {
+                console.log("Data is sent to DHIS");
+
+            }
+        ) */
+        $scope.clearForm();
+        //$scope.reset();
+
+    }
+
+    //Will reset form, so it is available for new data entry.
     $scope.reset = function() {
-        $scope.contents = {};
+        $scope.form.isSent = true;
+        $scope.clearForm();
     };
-
-
-    // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
-
 
 
     /* ------- SKIP LOGIC -------- */

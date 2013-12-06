@@ -1,16 +1,18 @@
+<div ng-show="form.isSent" class="information text-info"><h3>Thank you, your entry is recived!</h3></div>
 <h3>Filling in form {{form.name}}</h3>
 <h4>{{form.description}}</h4>
+
 
 <form class="simple-form">
 
     <table class="table table-striped">
         <tr ng-repeat="element in form.programStageDataElements | filter: show:true">
-            <td>{{element.dataElement.name}}<span style="color:red" ng-show="element.compulsory"><strong> *</strong></span></td>
+            <td>{{element.dataElement.name}}<span class="required" ng-show="element.compulsory"><strong> *</strong></span></td>
             <td><input ng-model="element.input" ng-required="{{element.compulsory}}" ng-change="updateForm()" /></td>
         </tr>
     </table>
-    <button ng-click="update(contents)">SAVE</button>
-    <button ng-click="reset()">RESET</button>
+    <button ng-click="deliver()">Save</button>
+    <button ng-click="clearForm()">Empty</button>
 </form>
 <hr>
 
