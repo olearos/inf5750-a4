@@ -169,7 +169,17 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         }
     };
 
+    // Filter for skipLogic
+    $scope.show = function(dataElement) {
+        return dataElement.show;
+    }
+
+
+    // Main data container
     $scope.form = {};
+    
+    // Show/Hide debug output (raw data containers)
+    $scope.debug = true;
 
     //Holds contents from form. // Not in use, kept because functions below use it
     $scope.contents= {};
@@ -184,7 +194,9 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         $scope.contents = {};
     };
 
+
     // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
+
 
 
     /* ------- SKIP LOGIC -------- */
