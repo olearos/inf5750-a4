@@ -1,15 +1,9 @@
 'use strict';
 
-
-// TODO Remove before upload ?
-var username = 'admin';
-var password = 'district';
-var dhisAPI = 'http://apps.dhis2.org/demo';
+/// Org unit for use with uploads as selection of this is not implemented
 var orgUnit = "g8upMTyEZGZ";  // ID for Njandama MCHP
 
-var login = 'Basic ' + btoa( username + ":" + password);
-
-
+/// Skip logic operators
 var operators = {
     "==" :  0,
     "!=" :  1,
@@ -31,7 +25,7 @@ var getHostApiUrl = function() {
 }
 
 
-/// Services
+//      - - Services - -
 
 var skipLogicServices = angular.module( 'skipLogic.services', [] );
 
@@ -93,7 +87,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
 }]);
 
 
-/// Controllers
+//      - - Controllers - -
 
 var skipLogicControls = angular.module( 'skipLogic.controllers', [] );
 
@@ -375,7 +369,7 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
 }]);
 
 
-/// Application module
+//      - - Application module - -
 
 var skipLogic =  angular.module('skipLogic', [
     'ngRoute',
@@ -383,11 +377,13 @@ var skipLogic =  angular.module('skipLogic', [
     'skipLogic.controllers',
 ]);
 
+/// Adds basic http authorization
+// ( should not be neccesary if launched from logged in dhis instance )
 skipLogic.config(function($httpProvider) {
     $httpProvider.defaults.headers.common = {
         'Accept': 'application/json, text/plain, * / *',
         'Data': '',
-        'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q="
+        'Authorization': "Basic YWRtaW46ZGlzdHJpY3Q="  // 'Basic ' + btoa( 'admin' + ":" + 'district' );
     };
 });
 
