@@ -4,13 +4,13 @@
 <form class="simple-form">
 
     <table class="table table-striped">
-        <tr ng-repeat="element in form.programStageDataElements | filter: showQuestion ">
+        <tr ng-repeat="element in form.programStageDataElements | filter: show:true">
             <td>{{element.dataElement.name}}<span style="color:red" ng-show="element.compulsory"><strong> *</strong></span></td>
-            <td><input ng-model="contents[element.dataElement.id]" ng-required="{{element.compulsory}}" /></td>
+            <td><input ng-model="element.input" ng-required="{{element.compulsory}}" ng-change="updateForm()" /></td>
         </tr>
     </table>
-    <button ng-click="reset()">RESET</button>
     <button ng-click="update(contents)">SAVE</button>
+    <button ng-click="reset()">RESET</button>
 </form>
 <hr>
 

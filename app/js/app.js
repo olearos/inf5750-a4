@@ -91,54 +91,94 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     // Skip logic function
     $scope.showQuestion = function( item ) {
-        if ( ! item.logic )
-            return true;
+        if ( ! item.logic ) {
+            item["show"] = true;
+        }
 
-        // TODO check if requirements for item are fulfilled
-        // return false for first found mismatch
         for ( var compField in item.logic ) {
 
-            var compValue = $scope.contents[ compField ];
-            if ( ! compValue ) return false;
+            var compValue;
+            for ( var element in $scope.form.programStageDataElements )
+                if ( $scope.form.programStageDataElements[ element ].dataElement.id === item.logic[ compField ].compFieldId )
+                    compValue = $scope.form.programStageDataElements[ element ].input;
+            if ( ! compValue ) {
+                item["show"] = false;
+                return false;
+            }
 
             for ( var requirement in item.logic[ compField ].requirements ) {
 
                 var reqValue = item.logic[ compField ].requirements[ requirement ].value;
-                console.log( "showQuestion: " + compValue + " " + item.logic[ compField ].requirements[ requirement ].operator + " " + reqValue );
+//                console.log( "showQuestion: " + compValue + " " + item.logic[ compField ].requirements[ requirement ].operator + " " + reqValue );
 
                 switch( operators[ item.logic[ compField ].requirements[ requirement ].operator ] ) {
                     case operators["=="]:
-                        if ( ! compValue === reqValue ) return false;
+                        if ( ! ( compValue === reqValue ) ) {
+                            item["show"] = false;
+                            return false;
+                        }
                         break;
+
                     case operators["!="]:
-                        if ( ! compValue !== reqValue ) return false;
+                        if ( ! ( compValue !== reqValue ) )  {
+                            item["show"] = false;
+                            return false;
+                        }
                         break;
+
                     case operators["<"]:
-                        if ( ! compValue < reqValue ) return false;
+                        if ( ! ( Number( compValue ) < Number( reqValue ) ) )  {
+                            item["show"] = false;
+                            return false;
+                        }
                         break;
+
                     case operators["<="]:
-                        if ( ! compValue <= reqValue ) return false;
+                        if ( ! ( Number( compValue ) <= Number( reqValue ) ) ) {
+                            item["show"] = false;
+                            return false;
+                        }
                         break;
+
                     case operators[">"]:
-                        if ( ! compValue > reqValue ) return false;
+                        if ( ! ( Number( compValue ) > Number( reqValue ) ) ) {
+                            item["show"] = false;
+                            return false;
+                        }
                         break;
+
                     case operators[">="]:
-                        if ( ! compValue >= reqValue ) return false;
-                        console.log( "showQuestion recieved >= operator" );
+//                        console.log( "! " + Number(compValue) + " >= " + Number(reqValue) );
+                        if ( ! (Number( compValue ) >= Number( reqValue ) ) )  {
+//                            console.log( "true" );
+                            item["show"] = false;
+                            return false;
+                        }
                         break;
+
                     default:
-                        console.log( "Invalid skipLogic operator" );
+                        console.log( "Invalid skipLogic operator: " + item.logic[ compField ].requirements[ requirement ].operator );
                 }
             }
         }
-
+//        console.log("end of showQuestion");
+        item["show"] = true;
         return true;
     };
+
+    $scope.updateForm = function() {
+//        console.log( "updateForm" );
+        for ( var element in $scope.form.programStageDataElements ) {
+            $scope.showQuestion( $scope.form.programStageDataElements[ element ] );
+        }
+    };
+
+
 
     $scope.form = {};
     $scope.debug = true;
 // Form is now the data shown, master is used only to display raw json from request
-    $scope.master= [];
+//    $scope.master= [];
 
     //Holds contents from form.
     $scope.contents= {};
@@ -168,8 +208,8 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     });*/
 
 //    $scope.urlole = "";
-    $scope.oledata = [];
-    $scope.temp = {};
+//    $scope.oledata = [];
+//    $scope.temp = {};
 
     /* ------- SKIP LOGIC -------- */
 
@@ -200,7 +240,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
         // Loop through elements
         for ( var x in data.programStageDataElements )  {
-            console.log( "Looping through x=" + x );
+//            console.log( "Looping through x=" + x );
 
             // Check if skipLogic exists for element, add as logic key
             for ( var f in $scope.skipLogic.fields ) {
@@ -208,9 +248,10 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
                     console.log( "Found skipLogic for " + $scope.form.programStageDataElements[ x ].dataElement.id );
                     $scope.form.programStageDataElements[ x ]["logic"] =
                         $scope.skipLogic.fields[ f ].compFields;
-                    console.log( "Added logic: " + $scope.skipLogic.fields[ f ].compFields );
+//                    console.log( "Added logic: " + $scope.skipLogic.fields[ f ].compFields );
                 }
             }
+
 
             // Fetch extra element data
             dhis.getData( 'dataElements/' + data.programStageDataElements[ x ].dataElement.id )
@@ -220,6 +261,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
                 // Results are overwritten, probably a chance result of which we end up with
                 console.log( "Got parameters " + x );
                 $scope.form.programStageDataElements[ x ]["parameters"] = fieldData;
+
 
 
                 //$scope.contents += data.id + ', ';
@@ -243,6 +285,9 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
             });
         };
+    })
+    .then( function() {
+        $scope.updateForm();
     });
 
 
