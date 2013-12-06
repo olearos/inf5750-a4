@@ -20,6 +20,17 @@ var operators = {
 };
 
 
+/// Workaround for the url local vs uploaded problematic
+// TODO Test after upload
+var getHostApiUrl = function() {
+    if ( window.location.host === "localhost" )
+        return "";
+    else
+        return "/demo";
+    // TODO Find more versatile approach, app should be uploadable and usable to any dhis instance
+}
+
+
 /// Services
 
 var skipLogicServices = angular.module( 'skipLogic.services', [] );
@@ -29,8 +40,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
       getData: function( target ) {
          var deferred = $q.defer();
 
-          //Running as app in DHIS, /api/ must be changed to /demo/api/.
-         $http.get( '/api/' + target + '.json' )
+         $http.get( getHostApiUrl() + '/api/' + target + '.json' )
          .success( function( data, status, headers, config ) {
             deferred.resolve( data );
          })
@@ -45,7 +55,6 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
    // TODO Actually test this...
       saveData: function( target, data ) {
          var deferred = $q.defer();
-         //Running as app in DHIS, /api/ must be changed to /demo/api/.
 
           /* -------- SAMPLE DATA ENTRY --------- */
           var payload = {
@@ -70,7 +79,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
           /* -------- /SAMPLE DATA ENTRY --------- */
 
           var headers = "Content-Type:application/json";
-          $http.post( '/api/' + target, data )
+          $http.post( getHostApiUrl() + '/api/' + target, data )
          .success( function( data, status, headers, config ) {
             alert( "Save success\n" + angular.toJson(data) );
             deferred.resolve( data, status, headers, config );
