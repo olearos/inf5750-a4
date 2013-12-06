@@ -189,10 +189,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         return dataElement.show;
     }
 
-
-
-
-    //Will send data from form to DHIS and prepare form for new entry
+    //Function for sending data from form to DHIS and prepare form for new entry
     $scope.deliver = function() {
         $scope.form.isSent = true;
         /*dhis.saveData($scope.form)
@@ -202,8 +199,6 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             }
         ) */
         $scope.clearForm();
-
-
     }
 
 
