@@ -114,7 +114,7 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
 }]);
 
 
-skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
+skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', '$filter', function($scope, dhis, $routeParams, $filter) {
 
     // Show/Hide debug output (raw data containers)
     $scope.debug = true;
@@ -224,16 +224,12 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
         /* ---- Generate entry ----- */
         var d = new Date();
-        var dateString = d.getDay() + "-" + d.getMonth() + "-" + d.getFullYear();
+        var dateString = $filter( 'date' )( d, "yyyy-MM-dd" ); //  d.getDay() + "-" + d.getMonth() + "-" + d.getFullYear();
         var dataValues = {};
         for(var element in $scope.form.programStageDataElements) {
             dataValues = {"dataElement":  + $scope.form.programStageDataElements[element].dataElement.id , "value":  + $scope.form.programStageDataElements[element].input};
         }
         //dataValues = dataValues.substr(0, dataValues.length -1);
-
-        //TODO: Fixme. JSON must be complete. See debug output "payload" in fillForm.html view.
-        //
-
 
         $scope.payload = {
             "program": "eBAyeGv0exc",
