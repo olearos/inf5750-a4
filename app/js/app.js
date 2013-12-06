@@ -234,56 +234,30 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     dhis.getData( 'programStages/' + $routeParams.formId )
     .then( function( data ) {
-//        $scope.master = data;
-
         $scope.form = data;
+
+        // Clojure for getting extra element data
+        // (necessary to avoid loop parameter changing while waiting for async return)
+        var getDataElement = function( id, saveTo ) {
+            dhis.getData( 'dataElements/' + id )
+            .then( function( fieldData ) {
+                console.log( "Got parameters " + id );
+                saveTo["parameters"] = fieldData;
+            });
+        }
 
         // Loop through elements
         for ( var x in data.programStageDataElements )  {
-//            console.log( "Looping through x=" + x );
-
-            // Check if skipLogic exists for element, add as logic key
             for ( var f in $scope.skipLogic.fields ) {
+                // Attach skip Logic if available
                 if ( $scope.skipLogic.fields[ f ].id === $scope.form.programStageDataElements[ x ].dataElement.id ) {
                     console.log( "Found skipLogic for " + $scope.form.programStageDataElements[ x ].dataElement.id );
                     $scope.form.programStageDataElements[ x ]["logic"] =
                         $scope.skipLogic.fields[ f ].compFields;
-//                    console.log( "Added logic: " + $scope.skipLogic.fields[ f ].compFields );
                 }
             }
-
-
-            // Fetch extra element data
-            dhis.getData( 'dataElements/' + data.programStageDataElements[ x ].dataElement.id )
-            .then( function( fieldData ) {
-                // Store extra element data as parameters
-                // FIXME This gets called every time, but the variable x has been updated to 5 (max) when the calls return.
-                // Results are overwritten, probably a chance result of which we end up with
-                console.log( "Got parameters " + x );
-                $scope.form.programStageDataElements[ x ]["parameters"] = fieldData;
-
-
-
-                //$scope.contents += data.id + ', ';
-                //$scope.oledata = data;
-                //Will hide "Age"
-/*                if ( data.id == "XXXqrur9Dvnyt5" )
-                    $scope.oledata['show'] = false;
-                else
-                    $scope.oledata['show'] = true;
-*/
-                //$scope.oledata['skipLogic'] = $scope.skipLogic[data.id];
-    // JQuery? - In WebStorm, push seems to be a part of JQuery. (possible problem)
-    // A: .push is a js function, but only for arrays (?)
-    // $scope.form.push -> ok, because form is an array
-    // $scope.master.push -> fail, because master is an object
-
-
-//                $scope.form.push($scope.oledata);
-//                $scope.master.push($scope.oledata);
-
-
-            });
+            // Fetch extra data for elements
+            getDataElement( data.programStageDataElements[ x ].dataElement.id, $scope.form.programStageDataElements[ x ] );
         };
     })
     .then( function() {
