@@ -4,7 +4,7 @@
 <form>
   <textarea json rows="13"  cols="50" ng-model="inputText" ></textarea>
   
-  <button ng-click="updateText(inputText)">Save</button>
+  <button ng-click="updateText()">Save</button>
 </form>
 
   
@@ -13,11 +13,7 @@
 <pre>inputText = {{inputText | json}}</pre>
 <pre>testLogic = {{testLogic | json}}</pre>
 
-<!---
-<textarea rows="13"  cols="50" ng-model="inputText">
-<span ng-bind="name"> </span>
-</textarea>
--->
+
 
 <table class="table table-striped">
    <tr ng-repeat="dataElement in form.programStageDataElements">
