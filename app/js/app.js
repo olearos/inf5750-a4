@@ -83,6 +83,8 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
                 alert( "Communication error while saving: " + status + "\nPlease try again!\n\n" + data );
                 deferred.reject( data, status, headers, config);
             });
+
+            return deferred.promise;
         }
     };
 }]);
