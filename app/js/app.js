@@ -66,7 +66,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
           };
 
 
-          data = payload;
+          //data = payload;
           /* -------- /SAMPLE DATA ENTRY --------- */
 
           var headers = "Content-Type:application/json";
@@ -215,8 +215,43 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     //Function for sending data from form to DHIS and prepare form for new entry
     $scope.deliver = function() {
+        $scope.payload = {};
+
         $scope.form.isSent = true;
-        dhis.saveData("/events/" , $scope.form)
+
+        /* ---- Generate entry ----- */
+        var d = new Date();
+        var dateString = d.getDay() + "-" + d.getMonth() + "-" + d.getFullYear();
+        var dataValues = {};
+        for(var element in $scope.form.programStageDataElements) {
+            dataValues = {"dataElement":  + $scope.form.programStageDataElements[element].dataElement.id , "value":  + $scope.form.programStageDataElements[element].input};
+        }
+        //dataValues = dataValues.substr(0, dataValues.length -1);
+
+        //TODO: Fixme. JSON must be complete. See debug output "payload" in fillForm.html view.
+        //
+
+
+        $scope.payload = {
+            "program": "eBAyeGv0exc",
+            "orgUnit": orgUnit,//DiszpKrYNg8,
+            "eventDate": dateString,
+            "status": "COMPLETED",
+            "storedBy": "admin",
+            "coordinate": {
+                "latitude": "59.8",
+                "longitude": "10.9"
+            },
+            "dataValues": [
+                /*{ "dataElement": "qrur9Dvnyt5", "value": "22" },
+                { "dataElement": "oZg33kd9taw", "value": "Male" },
+                { "dataElement": "msodh3rEMJa", "value": "2013-05-18" } */
+                dataValues
+            ]
+        };
+
+        //$scope.payload = dataValues;
+        dhis.saveData("/events/" , $scope.payload)
             .then( function() {
                 console.log("Data is sent to DHIS");
 
