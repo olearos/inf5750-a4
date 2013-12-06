@@ -89,6 +89,13 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
 
 skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
 
+    // Show/Hide debug output (raw data containers)
+    $scope.debug = true;
+
+    $scope.form = {};
+    if($scope.form.isSent == null) $scope.form.isSent = false;
+
+
     // Skip logic function
     $scope.showQuestion = function( item ) {
         if ( ! item.logic ) {
@@ -183,18 +190,9 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     }
 
 
-    // Main data container
-    $scope.form = {};
-    if($scope.form.isSent == null) $scope.form.isSent = false;
-    // Show/Hide debug output (raw data containers)
-    $scope.debug = true;
-
-    //Holds contents from form. // Not in use, kept because functions below use it
-    $scope.contents= {};
-    $scope.master = {};
 
 
-    //Will send data from form to DHIS.
+    //Will send data from form to DHIS and prepare form for new entry
     $scope.deliver = function() {
         $scope.form.isSent = true;
         /*dhis.saveData($scope.form)
@@ -204,15 +202,11 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             }
         ) */
         $scope.clearForm();
-        //$scope.reset();
+
 
     }
 
-    //Will reset form, so it is available for new data entry.
-    $scope.reset = function() {
-        $scope.form.isSent = true;
-        $scope.clearForm();
-    };
+
 
 
     /* ------- SKIP LOGIC -------- */

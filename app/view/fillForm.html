@@ -16,26 +16,8 @@
 </form>
 <hr>
 
-<!--
-<h3>Filling in form {{form.name}}</h3>
-        <h4>{{form.description}}</h4>
 
-<form class="simple-form">
-
-    <table class="table table-striped">
-        <tr ng-repeat="dataElement in form.programStageDataElements">
-            <td>{{dataElement.dataElement.name}}<span style="color:red" ng-show="dataElement.compulsory"><strong> *</strong></span></td>
-            <td><input ng-model="contents[dataElement.dataElement.id]" ng-required="{{dataElement.compulsory}}" /></td>
-        </tr>
-    </table>
-    <button ng-click="reset()">RESET</button>
-    <button ng-click="update(contents)">SAVE</button>
-</form>
-        <hr>
--->
-<!-- Shows output from contents and master for debug purposes -->
-<pre ng-show="debug">contents = {{contents | json}}</pre>
+<!-- Shows output from form and skipLogic for debug purposes -->
 <pre ng-show="debug">form = {{form | json}}</pre>
-<pre ng-show="debug">master = {{master | json}}</pre>
 <pre ng-show="debug">skipLogic = {{skipLogic | json}}</pre>
 
