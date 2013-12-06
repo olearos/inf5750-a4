@@ -29,7 +29,8 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
       getData: function( target ) {
          var deferred = $q.defer();
 
-         $http.get( '/demo/api/' + target + '.json' )
+          //Running as app in DHIS, /api/ must be changed to /demo/api/.
+         $http.get( '/api/' + target + '.json' )
          .success( function( data, status, headers, config ) {
             deferred.resolve( data );
          })
@@ -44,8 +45,8 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
    // TODO Actually test this...
       saveData: function( target, data ) {
          var deferred = $q.defer();
-
-         $http.post( '/demo/api/' + target, data )
+         //Running as app in DHIS, /api/ must be changed to /demo/api/.
+         $http.post( '/api/' + target, data )
          .success( function( data, status, headers, config ) {
             alert( "Save success\n" + data );
             deferred.resolve( data, status, headers, config );
@@ -183,6 +184,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
     //Holds contents from form. // Not in use, kept because functions below use it
     $scope.contents= {};
+    $scope.master = {};
 
     //Will update master with data form contents
     $scope.update = function(contents) {
