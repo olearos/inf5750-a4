@@ -29,7 +29,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
       getData: function( target ) {
          var deferred = $q.defer();
 
-         $http.get( '/api/' + target + '.json' )
+         $http.get( '/demo/api/' + target + '.json' )
          .success( function( data, status, headers, config ) {
             deferred.resolve( data );
          })
@@ -45,7 +45,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
       saveData: function( target, data ) {
          var deferred = $q.defer();
 
-         $http.post( '/api/' + target, data )
+         $http.post( '/demo/api/' + target, data )
          .success( function( data, status, headers, config ) {
             alert( "Save success\n" + data );
             deferred.resolve( data, status, headers, config );
