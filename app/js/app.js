@@ -85,8 +85,8 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
             deferred.resolve( data, status, headers, config );
          })
          .error( function(  data, status, headers, config ) {
-            alert( "Save failed\n" + data );
-            deferred.reject( data, status, headers, config);
+             alert( "Save failed\n" + data );
+	     deferred.reject( data, status, headers, config);
          });
       }
    };
@@ -335,7 +335,6 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
         $scope.form = data;
    });
 
-    // TODO
     ///TEST VARIABLE
     $scope.testLogic = 
 	{
@@ -352,22 +351,24 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
             }]
 	};
     ///END TEST///
+
     $scope.inputText = {}; 
-    //{
-    //   "programStageId" : "hva"
-    //};
-    //console.log($scope.inputText.programStageId);
     
-    $scope.updateText = function(input) {
+    $scope.updateText = function() {
+	$scope.tmp = '{}';
+	//Find a way to create object like $scope.testLogig for use it in fillForm?
+	//for(var a in input.split("\n")) {
+	//    $scope.tmp += a; 
+	//}
+	//console.log($scope.tmp);
+	
+	//Print to console to debug
 	console.log($scope.testLogic);
+	console.log($scope.testLogic.programStageId);
 	
-	console.log(angular.toJson(input));
-
-	$scope.inputText = JSON.parse(JSON.stringify(input));
 	console.log($scope.inputText);
+	console.log(angular.toJson($scope.inputText));
 	
-
-		
 	console.log($scope.inputText.programStageId);
     }
 
