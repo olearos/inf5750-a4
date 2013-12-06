@@ -30,60 +30,61 @@ var getHostApiUrl = function() {
 var skipLogicServices = angular.module( 'skipLogic.services', [] );
 
 skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
-   return {
-      getData: function( target ) {
-         var deferred = $q.defer();
+    return {
+        getData: function( target ) {
+            var deferred = $q.defer();
 
-         $http.get( getHostApiUrl() + '/api/' + target + '.json' )
-         .success( function( data, status, headers, config ) {
-            deferred.resolve( data );
-         })
-         .error( function( data, status, headers, config ) {
-            alert( "Error getting data:\n" + status );
-            deferred.reject();
-         });
+            $http.get( getHostApiUrl() + '/api/' + target + '.json' )
+            .success( function( data, status, headers, config ) {
+                deferred.resolve( data );
+            })
+            .error( function( data, status, headers, config ) {
+                alert( "Error getting data:\n" + status );
+                deferred.reject();
+            });
 
-         return deferred.promise;
-      },
+            return deferred.promise;
+        },
 
-   // TODO Actually test this...
-      saveData: function( target, data ) {
-         var deferred = $q.defer();
+        saveData: function( target, data ) {
+            var deferred = $q.defer();
 
           /* -------- SAMPLE DATA ENTRY --------- */
-          var payload = {
-              "program": "eBAyeGv0exc",
-              "orgUnit": "DiszpKrYNg8",
-              "eventDate": "2013-05-17",
-              "status": "COMPLETED",
-              "storedBy": "admin",
-              "coordinate": {
-              "latitude": "59.8",
-                  "longitude": "10.9"
-          },
-              "dataValues": [
-              { "dataElement": "qrur9Dvnyt5", "value": "22" },
-              { "dataElement": "oZg33kd9taw", "value": "Male" },
-              { "dataElement": "msodh3rEMJa", "value": "2013-05-18" }
-          ]
-          };
-
+/*
+            var payload = {
+                  "program": "eBAyeGv0exc",
+                  "orgUnit": "DiszpKrYNg8",
+                  "eventDate": "2013-05-17",
+                  "status": "COMPLETED",
+                  "storedBy": "admin",
+                  "coordinate": {
+                      "latitude": "59.8",
+                      "longitude": "10.9"
+                  },
+                  "dataValues": [
+                      { "dataElement": "qrur9Dvnyt5", "value": "22" },
+                      { "dataElement": "oZg33kd9taw", "value": "Male" },
+                      { "dataElement": "msodh3rEMJa", "value": "2013-05-18" }
+                  ]
+            };
 
           //data = payload;
+*/
           /* -------- /SAMPLE DATA ENTRY --------- */
 
-          var headers = "Content-Type:application/json";
-          $http.post( getHostApiUrl() + '/api/' + target, data )
-         .success( function( data, status, headers, config ) {
-            alert( "Save success\n" + angular.toJson(data) );
-            deferred.resolve( data, status, headers, config );
-         })
-         .error( function(  data, status, headers, config ) {
-             alert( "Save failed\n" + data );
-	     deferred.reject( data, status, headers, config);
-         });
-      }
-   };
+            var headers = "Content-Type:application/json";
+
+            $http.post( getHostApiUrl() + '/api/' + target, data )
+            .success( function( data, status, headers, config ) {
+//                alert( "Save success\n" + angular.toJson(data) );
+                deferred.resolve( data, status, headers, config );
+            })
+            .error( function(  data, status, headers, config ) {
+                alert( "Communication error while saving: " + status + "\nPlease try again!\n\n" + data );
+                deferred.reject( data, status, headers, config);
+            });
+        }
+    };
 }]);
 
 
@@ -251,12 +252,13 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
 
         //$scope.payload = dataValues;
         dhis.saveData("/events/" , $scope.payload)
-            .then( function() {
-                console.log("Data is sent to DHIS");
-
-            }
-        )
-        $scope.clearForm();
+        .then( function() {
+            // TODO Check if return data indicates success or not
+            console.log("Data is sent to DHIS");
+            // TODO Only clear form if submission is successful
+            $scope.clearForm();
+        });
+        // TODO Handle submission connection/transfer errror
     }
 
 
@@ -405,3 +407,4 @@ skipLogic.config(function($routeProvider) {
         redirectTo:     '/'
     });
 });
+
