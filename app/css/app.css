@@ -28,3 +28,13 @@
   content: "";
   padding: 0;
 }
+
+
+div.information {
+    padding: 10px;
+    border: solid 1px #3a87ad;
+}
+
+.required {
+    color: red;
+}
