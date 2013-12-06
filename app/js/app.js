@@ -29,6 +29,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
       getData: function( target ) {
          var deferred = $q.defer();
 
+          //Running as app in DHIS, /api/ must be changed to /demo/api/.
          $http.get( '/demo/api/' + target + '.json' )
          .success( function( data, status, headers, config ) {
             deferred.resolve( data );
@@ -44,7 +45,7 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
    // TODO Actually test this...
       saveData: function( target, data ) {
          var deferred = $q.defer();
-
+         //Running as app in DHIS, /api/ must be changed to /demo/api/.
          $http.post( '/demo/api/' + target, data )
          .success( function( data, status, headers, config ) {
             alert( "Save success\n" + data );
@@ -87,6 +88,13 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
 
 
 skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
+
+    // Show/Hide debug output (raw data containers)
+    $scope.debug = true;
+
+    $scope.form = {};
+    if($scope.form.isSent == null) $scope.form.isSent = false;
+
 
     // Skip logic function
     $scope.showQuestion = function( item ) {
@@ -169,33 +177,30 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         }
     };
 
-    // Filter for skipLogic
+    //Function for updating form display, ie. removing previous input.
+    $scope.clearForm = function() {
+        for ( var element in $scope.form.programStageDataElements ) {
+            $scope.form.programStageDataElements[ element ].input = null;
+        }
+    };
+
+    // Filter for skipLogic - used for filtering questions.
     $scope.show = function(dataElement) {
         return dataElement.show;
     }
 
+    //Function for sending data from form to DHIS and prepare form for new entry
+    $scope.deliver = function() {
+        $scope.form.isSent = true;
+        /*dhis.saveData($scope.form)
+            .then( function(report) {
+                console.log("Data is sent to DHIS");
 
-    // Main data container
-    $scope.form = {};
-    
-    // Show/Hide debug output (raw data containers)
-    $scope.debug = true;
+            }
+        ) */
+        $scope.clearForm();
+    }
 
-    //Holds contents from form. // Not in use, kept because functions below use it
-    $scope.contents= {};
-
-    //Will update master with data form contents
-    $scope.update = function(contents) {
-        $scope.master= angular.copy(contents);
-    };
-
-    //Will empty contents.
-    $scope.reset = function() {
-        $scope.contents = {};
-    };
-
-
-    // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
 
 
 
@@ -263,6 +268,40 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
    });
 
    // TODO
+    ///TEST///
+     $scope.testLogic = 
+    {
+        "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
+        "fields" : [{
+            "id" : "oZg33kd9taw",               // Gender
+            "compFields" : [{
+                "compFieldId" :"qrur9Dvnyt5",   // Age
+                "requirements" : [{
+                    "operator" : ">=",          // Comparison operator
+                    "value" : 15                // Comparison value
+                }]
+            }]
+        }]
+    };
+    ///END TEST///
+    $scope.inputText = {}; 
+	//{
+	 //   "programStageId" : "hva"
+	//};
+    //console.log($scope.inputText.programStageId);
+    
+    $scope.updateText = function(input) {
+	console.log($scope.testLogic);
+
+	console.log(angular.toJson(input));
+
+	$scope.inputText = JSON.parse(JSON.stringify(input));
+	console.log($scope.inputText);
+	
+
+		
+	console.log($scope.inputText.programStageId);
+    }
 
 }]);
 
@@ -313,17 +352,17 @@ skipLogic.config(function($routeProvider) {
 function getUserOrg() {
     var id;
     $.ajax({
-	type : "GET",
-	url : "/api/currentUser.json", 
-	dataType : "json",
+        type : "GET",
+        url : "/api/currentUser.json", 
+        dataType : "json",
     })
-	.fail(function (error) {
-	    alert("No user info!");
-	})
-	.done(function (json) {
-	   alert(json.organisationUnits[0].id);
-	   id = json.organisationUnits[0].id;
-	});
+        .fail(function (error) {
+            alert("No user info!");
+        })
+        .done(function (json) {
+           alert(json.organisationUnits[0].id);
+           id = json.organisationUnits[0].id;
+        });
     alert(id);
     return id;
 } 
@@ -334,34 +373,34 @@ function sendF() {
     var period = d.getFullYear() + "" + d.getMonth();
     //Missing formID and organiasationID
     var xmlString =  '<?xml version="1.0" encoding="utf-8"?>\n' +
-	'<event program="' + 'eBAyeGv0exc' + '" orgUnit="' + 'ImspTQPwCqd' + '" eventDate="' +  period + '" status="COMPLETED" storedBy="admin">\n' +
-	'<coordinate latiude="59" longitude="10" />\n' +
-	'<dataValues>\n';    
+        '<event program="' + 'eBAyeGv0exc' + '" orgUnit="' + 'ImspTQPwCqd' + '" eventDate="' +  period + '" status="COMPLETED" storedBy="admin">\n' +
+        '<coordinate latiude="59" longitude="10" />\n' +
+        '<dataValues>\n';    
     
     //<!-- Set dataValue dataElement= value= -->
     
     //TEST
     xmlString += '<dataValue dataElement="qrur9Dvnyt5" value="22" />\n' +
-	'<dataValue dataElement="oZg33kd9taw" value="Male" />\n' +
-	'<dataValue dataElement="msodh3rEMJa" value="2013-05-18" />\n';
+        '<dataValue dataElement="oZg33kd9taw" value="Male" />\n' +
+        '<dataValue dataElement="msodh3rEMJa" value="2013-05-18" />\n';
     //TEST END
 
     xmlString +=  '</dataValues>\n</event>'; 
     
     alert(xmlString);
     $.ajax({
-	type : "POST",
-	data : xmlString,
-	contentType : "application/xml",
-	url : "http://apps.dhis2.org/demo/api/events",
-	dataType : "xml", 
+        type : "POST",
+        data : xmlString,
+        contentType : "application/xml",
+        url : "http://apps.dhis2.org/demo/api/events",
+        dataType : "xml", 
     })
-	.fail(function(error) {
-	    console.log(error);
-	    alert("Sending of form failed!");
-	})
-	.done(function (xml) {
-	    console.log(xml);
-	    alert(message);//<!-- Check for return message--->
-	});
+        .fail(function(error) {
+            console.log(error);
+            alert("Sending of form failed!");
+        })
+        .done(function (xml) {
+            console.log(xml);
+            alert(message);//<!-- Check for return message--->
+        });
 }
