@@ -87,7 +87,6 @@ skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function(
 
 
 skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', function($scope, dhis, $routeParams) {
-//get data from form.
 
     // Skip logic function
     $scope.showQuestion = function( item ) {
@@ -95,8 +94,9 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             item["show"] = true;
         }
 
+        // Loop through fields to check
         for ( var compField in item.logic ) {
-
+            // Loop through fields to find value of field to check
             var compValue;
             for ( var element in $scope.form.programStageDataElements )
                 if ( $scope.form.programStageDataElements[ element ].dataElement.id === item.logic[ compField ].compFieldId )
@@ -105,12 +105,11 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
                 item["show"] = false;
                 return false;
             }
-
+            // Loop through requirements for field
             for ( var requirement in item.logic[ compField ].requirements ) {
-
                 var reqValue = item.logic[ compField ].requirements[ requirement ].value;
-//                console.log( "showQuestion: " + compValue + " " + item.logic[ compField ].requirements[ requirement ].operator + " " + reqValue );
 
+                // Check if requirement is fulfilled for value
                 switch( operators[ item.logic[ compField ].requirements[ requirement ].operator ] ) {
                     case operators["=="]:
                         if ( ! ( compValue === reqValue ) ) {
@@ -148,9 +147,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
                         break;
 
                     case operators[">="]:
-//                        console.log( "! " + Number(compValue) + " >= " + Number(reqValue) );
                         if ( ! (Number( compValue ) >= Number( reqValue ) ) )  {
-//                            console.log( "true" );
                             item["show"] = false;
                             return false;
                         }
@@ -161,26 +158,20 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
                 }
             }
         }
-//        console.log("end of showQuestion");
         item["show"] = true;
         return true;
     };
 
+    // Function for updating form display, ie. calculating skipLogic for each field
     $scope.updateForm = function() {
-//        console.log( "updateForm" );
         for ( var element in $scope.form.programStageDataElements ) {
             $scope.showQuestion( $scope.form.programStageDataElements[ element ] );
         }
     };
 
-
-
     $scope.form = {};
-    $scope.debug = true;
-// Form is now the data shown, master is used only to display raw json from request
-//    $scope.master= [];
 
-    //Holds contents from form.
+    //Holds contents from form. // Not in use, kept because functions below use it
     $scope.contents= {};
 
     //Will update master with data form contents
@@ -193,23 +184,8 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
         $scope.contents = {};
     };
 
-    //TODO: Remove? Currently unused
-    $scope.show = function(dataElement) {
-        return dataElement.show;
-    }
-
     // var formid = "http://apps.dhis2.org/demo/api/programStages/Zj7UnCAulEk.json";
 
-    //http://localhost/api/programStages/Zj7UnCAulEk.json
-    /*dhis.getData( 'programs/' + $routeParams.formId )
-      .then( function( data ) {
-      $scope.form = data;
-      $scope.master = data;
-    });*/
-
-//    $scope.urlole = "";
-//    $scope.oledata = [];
-//    $scope.temp = {};
 
     /* ------- SKIP LOGIC -------- */
 
