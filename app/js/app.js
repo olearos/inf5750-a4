@@ -85,6 +85,61 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
             });
 
             return deferred.promise;
+        },
+
+        applySkipLogic: function( form ) {
+
+            // TODO Load skipLogic from dhis
+
+            /* ------- SKIP LOGIC -------- */
+
+            var skipLogic =
+            {
+                "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
+                "fields" : [{
+                    "id" : "oZg33kd9taw",               // Gender
+                    "compFields" : [{
+                        "compFieldId" :"qrur9Dvnyt5",   // Age
+                        "requirements" : [{
+                            "operator" : ">=",          // Comparison operator
+                            "value" : 15                // Comparison value
+                        }]
+                    }]
+                }]
+            };
+
+            /* ------- /SKIP LOGIC -------- */
+
+            // Loop through elements
+            for ( var x in form.programStageDataElements )  {
+                for ( var f in skipLogic.fields ) {
+                    // Attach skip Logic if available
+                    if ( skipLogic.fields[ f ].id === form.programStageDataElements[ x ].dataElement.id ) {
+                        console.log( "Found skipLogic for " + form.programStageDataElements[ x ].dataElement.id );
+                        form.programStageDataElements[ x ]["logic"] =
+                            skipLogic.fields[ f ].compFields;
+                    }
+                }
+            };
+        },
+
+        extractSkipLogic: function( form ) {
+            var skipLogic = {};
+
+            var hasLogic = false;
+
+            skipLogic[ "programStageId" ] = form.program.id;
+            skipLogic[ "fields" ] = new Array();
+            for ( var x in form.programStageDataElements )  {
+                if ( form.programStageDataElements[ x ].logic ) {
+                    console.log( "Found skipLogic for " + form.programStageDataElements[ x ].dataElement.id );
+                    skipLogic.fields.push( angular.copy( form.programStageDataElements[ x ].logic[ 0 ] ) );
+                    hasLogic = true;
+                }
+            };
+            
+            if ( hasLogic ) return skipLogic;
+            else return "";
         }
     };
 }]);
@@ -96,11 +151,11 @@ var skipLogicControls = angular.module( 'skipLogic.controllers', [] );
 
 skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function( $scope, dhis ) {
 
-   $scope.getStages = function( index ) {
+   $scope.getStages = function( program ) {
       $scope.showStages = false;
-      $scope.selectedProgramName = $scope.programs.programs[index].name;
+      $scope.selectedProgramName = program.name;
       
-      dhis.getData( 'programs/' + $scope.programs.programs[index].id )
+      dhis.getData( 'programs/' + program.id )
       .then( function( data ) {
          $scope.programStages = data;
          $scope.showStages = true;
@@ -264,29 +319,6 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     }
 
 
-
-
-    /* ------- SKIP LOGIC -------- */
-
-    $scope.skipLogic = 
-    {
-        "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
-        "fields" : [{
-            "id" : "oZg33kd9taw",               // Gender
-            "compFields" : [{
-                "compFieldId" :"qrur9Dvnyt5",   // Age
-                "requirements" : [{
-                    "operator" : ">=",          // Comparison operator
-                    "value" : 15                // Comparison value
-                }]
-            }]
-        }]
-    };
-
-    /* ------- /SKIP LOGIC -------- */
-
-                
-
     dhis.getData( 'programStages/' + $routeParams.formId )
     .then( function( data ) {
         $scope.form = data;
@@ -301,22 +333,17 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             });
         }
 
+        dhis.applySkipLogic( data );
+
         // Loop through elements
         for ( var x in data.programStageDataElements )  {
-            for ( var f in $scope.skipLogic.fields ) {
-                // Attach skip Logic if available
-                if ( $scope.skipLogic.fields[ f ].id === $scope.form.programStageDataElements[ x ].dataElement.id ) {
-                    console.log( "Found skipLogic for " + $scope.form.programStageDataElements[ x ].dataElement.id );
-                    $scope.form.programStageDataElements[ x ]["logic"] =
-                        $scope.skipLogic.fields[ f ].compFields;
-                }
-            }
             // Fetch extra data for elements
             getDataElement( data.programStageDataElements[ x ].dataElement.id, $scope.form.programStageDataElements[ x ] );
         };
     })
     .then( function() {
         $scope.updateForm();
+        $scope.skipLogic = dhis.extractSkipLogic( $scope.form );
     });
 
 
@@ -331,39 +358,39 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
 
     ///TEST VARIABLE
     $scope.testLogic = 
-	{
+        {
             "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
             "fields" : [{
-		"id" : "oZg33kd9taw",               // Gender
-		"compFields" : [{
+                "id" : "oZg33kd9taw",               // Gender
+                "compFields" : [{
                     "compFieldId" :"qrur9Dvnyt5",   // Age
                     "requirements" : [{
-			"operator" : ">=",          // Comparison operator
-			"value" : 15                // Comparison value
+                        "operator" : ">=",          // Comparison operator
+                        "value" : 15                // Comparison value
                     }]
-		}]
+                }]
             }]
-	};
+        };
     ///END TEST///
 
     $scope.inputText = {}; 
     
     $scope.updateText = function() {
-	$scope.tmp = '{}';
-	//Find a way to create object like $scope.testLogig for use it in fillForm?
-	//for(var a in input.split("\n")) {
-	//    $scope.tmp += a; 
-	//}
-	//console.log($scope.tmp);
-	
-	//Print to console to debug
-	console.log($scope.testLogic);
-	console.log($scope.testLogic.programStageId);
-	
-	console.log($scope.inputText);
-	console.log(angular.toJson($scope.inputText));
-	
-	console.log($scope.inputText.programStageId);
+        $scope.tmp = '{}';
+        //Find a way to create object like $scope.testLogig for use it in fillForm?
+        //for(var a in input.split("\n")) {
+        //    $scope.tmp += a; 
+        //}
+        //console.log($scope.tmp);
+        
+        //Print to console to debug
+        console.log($scope.testLogic);
+        console.log($scope.testLogic.programStageId);
+        
+        console.log($scope.inputText);
+        console.log(angular.toJson($scope.inputText));
+        
+        console.log($scope.inputText.programStageId);
     }
 
 }]);
@@ -409,4 +436,3 @@ skipLogic.config(function($routeProvider) {
         redirectTo:     '/'
     });
 });
-
