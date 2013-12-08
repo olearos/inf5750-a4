@@ -7,7 +7,7 @@
 
    <table class="table table-striped">
       <tr ng-repeat="program in programs.programs | filter: programFilter | orderBy: name">
-         <td><a ng-click="getStages( $index )">{{ program.name }}</a></td>
+         <td><a ng-click="getStages( program )">{{ program.name }}</a></td>
       </tr>
    </table>
 </div>
