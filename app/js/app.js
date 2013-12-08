@@ -96,11 +96,11 @@ var skipLogicControls = angular.module( 'skipLogic.controllers', [] );
 
 skipLogicControls.controller( 'selectProgramCtrl', [ '$scope', 'dhis', function( $scope, dhis ) {
 
-   $scope.getStages = function( index ) {
+   $scope.getStages = function( program ) {
       $scope.showStages = false;
-      $scope.selectedProgramName = $scope.programs.programs[index].name;
+      $scope.selectedProgramName = program.name;
       
-      dhis.getData( 'programs/' + $scope.programs.programs[index].id )
+      dhis.getData( 'programs/' + program.id )
       .then( function( data ) {
          $scope.programStages = data;
          $scope.showStages = true;
