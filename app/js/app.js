@@ -356,41 +356,63 @@ skipLogicControls.controller('editLogicCtrl', ['$scope', 'dhis', '$routeParams',
         $scope.form = data;
    });
 
-    ///TEST VARIABLE
-    $scope.testLogic = 
-        {
-            "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
-            "fields" : [{
-                "id" : "oZg33kd9taw",               // Gender
-                "compFields" : [{
-                    "compFieldId" :"qrur9Dvnyt5",   // Age
-                    "requirements" : [{
-                        "operator" : ">=",          // Comparison operator
-                        "value" : 15                // Comparison value
-                    }]
-                }]
-            }]
-        };
-    ///END TEST///
-
-    $scope.inputText = {}; 
+    /*
+      Example Format on input
+      programStageId: Zj7UnCAulEk
+         fields: [      
+            id: oZg33kd9taw      
+	    fieldName: testField       
+	    testFelt: 12345
+     */
+    
+    $scope.inputText = []; 
     
     $scope.updateText = function() {
-        $scope.tmp = '{}';
-        //Find a way to create object like $scope.testLogig for use it in fillForm?
-        //for(var a in input.split("\n")) {
-        //    $scope.tmp += a; 
-        //}
-        //console.log($scope.tmp);
-        
-        //Print to console to debug
-        console.log($scope.testLogic);
-        console.log($scope.testLogic.programStageId);
-        
-        console.log($scope.inputText);
-        console.log(angular.toJson($scope.inputText));
-        
-        console.log($scope.inputText.programStageId);
+	//Sensitive on input, see example above
+	var t1, t2, t3;
+	var tmp, tmp2;
+	$scope.newLogic = {};
+	var tmpAr = $scope.inputText.split('\n');
+	//Loop through for setting testlogic
+	for (tmp = 0; tmp < tmpAr.length; tmp++) {  
+	    t1 = tmpAr[tmp].replace(/^\s+|\s+/g, '');
+	    if (t1.indexOf("[") != -1) {
+		t2 = t1.replace(/\[/g, '');
+		var fields = [];
+		var ins = {};
+		for(tmp2 = tmp+1; tmp2 < tmpAr.length; tmp2++) { 
+		    t3 = tmpAr[tmp2].replace(/^\s+|\s+/g, '');
+		    console.log("t3: " + t3);
+		    if (t3.indexOf("[") != -1) {
+			//do something
+		    }else if (t3.indexOf(":") != -1){		
+			var z = t3.split(":");
+			var x = z[0].replace(/^\s+|\s+/g, '');
+			var y = z[1].replace(/^\s+|\s+/g, '');
+			if(x.indexOf("id") != -1) {
+			    ins.id = y;
+			} else if (x.indexOf("fieldName")) {
+			    ins.fieldName = y;
+			}else if (x.indexOf("testFelt")){
+			    ins.testFelt = y;
+			}
+		    }else {
+			tmp = tmp2;
+			break;
+		    }
+		}
+		fields.push(ins);
+		$scope.newLogic.fields = fields; 
+		tmp = tmp2;
+	    }else if (t1.indexOf[":"] != -1){
+		var c = t1.split(":");
+		var a = c[0].replace(/^\s+|\s+/g, '');
+		var b = c[1].replace(/^\s+|\s+/g, '');
+		$scope.newLogic.programStageId = b;
+	    }
+	}
+	console.log($scope.newLogic);
+	console.log($scope.newLogic.fields[0].id);
     }
 
 }]);
