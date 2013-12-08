@@ -121,6 +121,25 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
                     }
                 }
             };
+        },
+
+        extractSkipLogic: function( form ) {
+            var skipLogic = {};
+
+            var hasLogic = false;
+
+            skipLogic[ "programStageId" ] = form.program.id;
+            skipLogic[ "fields" ] = new Array();
+            for ( var x in form.programStageDataElements )  {
+                if ( form.programStageDataElements[ x ].logic ) {
+                    console.log( "Found skipLogic for " + form.programStageDataElements[ x ].dataElement.id );
+                    skipLogic.fields.push( angular.copy( form.programStageDataElements[ x ].logic[ 0 ] ) );
+                    hasLogic = true;
+                }
+            };
+            
+            if ( hasLogic ) return skipLogic;
+            else return "";
         }
     };
 }]);
@@ -324,6 +343,7 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     })
     .then( function() {
         $scope.updateForm();
+        $scope.skipLogic = dhis.extractSkipLogic( $scope.form );
     });
 
 
