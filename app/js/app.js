@@ -85,6 +85,42 @@ skipLogicServices.factory('dhis', ['$http', '$q', function($http, $q) {
             });
 
             return deferred.promise;
+        },
+
+        applySkipLogic: function( form ) {
+
+            // TODO Load skipLogic from dhis
+
+            /* ------- SKIP LOGIC -------- */
+
+            var skipLogic =
+            {
+                "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
+                "fields" : [{
+                    "id" : "oZg33kd9taw",               // Gender
+                    "compFields" : [{
+                        "compFieldId" :"qrur9Dvnyt5",   // Age
+                        "requirements" : [{
+                            "operator" : ">=",          // Comparison operator
+                            "value" : 15                // Comparison value
+                        }]
+                    }]
+                }]
+            };
+
+            /* ------- /SKIP LOGIC -------- */
+
+            // Loop through elements
+            for ( var x in form.programStageDataElements )  {
+                for ( var f in skipLogic.fields ) {
+                    // Attach skip Logic if available
+                    if ( skipLogic.fields[ f ].id === form.programStageDataElements[ x ].dataElement.id ) {
+                        console.log( "Found skipLogic for " + form.programStageDataElements[ x ].dataElement.id );
+                        form.programStageDataElements[ x ]["logic"] =
+                            skipLogic.fields[ f ].compFields;
+                    }
+                }
+            };
         }
     };
 }]);
@@ -264,29 +300,6 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
     }
 
 
-
-
-    /* ------- SKIP LOGIC -------- */
-
-    $scope.skipLogic = 
-    {
-        "programStageId" : "Zj7UnCAulEk",       // Single-Event Inpatient morbidity and mortality
-        "fields" : [{
-            "id" : "oZg33kd9taw",               // Gender
-            "compFields" : [{
-                "compFieldId" :"qrur9Dvnyt5",   // Age
-                "requirements" : [{
-                    "operator" : ">=",          // Comparison operator
-                    "value" : 15                // Comparison value
-                }]
-            }]
-        }]
-    };
-
-    /* ------- /SKIP LOGIC -------- */
-
-                
-
     dhis.getData( 'programStages/' + $routeParams.formId )
     .then( function( data ) {
         $scope.form = data;
@@ -301,16 +314,10 @@ skipLogicControls.controller('fillFormCtrl', ['$scope', 'dhis', '$routeParams', 
             });
         }
 
+        dhis.applySkipLogic( data );
+
         // Loop through elements
         for ( var x in data.programStageDataElements )  {
-            for ( var f in $scope.skipLogic.fields ) {
-                // Attach skip Logic if available
-                if ( $scope.skipLogic.fields[ f ].id === $scope.form.programStageDataElements[ x ].dataElement.id ) {
-                    console.log( "Found skipLogic for " + $scope.form.programStageDataElements[ x ].dataElement.id );
-                    $scope.form.programStageDataElements[ x ]["logic"] =
-                        $scope.skipLogic.fields[ f ].compFields;
-                }
-            }
             // Fetch extra data for elements
             getDataElement( data.programStageDataElements[ x ].dataElement.id, $scope.form.programStageDataElements[ x ] );
         };
